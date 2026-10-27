@@ -279,6 +279,7 @@
 
 
 		'catalogBaseUrl' => $baseUrl,
+		'catalogStockOnly' => $catalogFilter->stockStatus === 'in_stock',
 
 
 

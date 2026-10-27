@@ -31,11 +31,141 @@ class Category
 				 ADD COLUMN `home_position` int(11) NOT NULL DEFAULT 0 AFTER `show_on_home`"
 			);
 		}
+
+		$categoryPosition = DB::execute("SHOW COLUMNS FROM `categories` LIKE 'category_position'");
+		if (empty($categoryPosition)) {
+			DB::execute("ALTER TABLE `categories` ADD COLUMN `category_position` int(11) NOT NULL DEFAULT 0 AFTER `home_position`");
+		}
+
+		$dir = self::imageDir();
+
+		if (!is_dir($dir)) {
+			@mkdir($dir, 0755, true);
+		}
+	}
+
+	public static function imageDir(): string
+	{
+		return dirname(__DIR__) . '/img/category';
+	}
+
+	/** @var string[] */
+	private const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+
+	public static function getImageFile(int $idCategory): ?string
+	{
+		if ($idCategory <= 0) {
+			return null;
+		}
+
+		$dir = self::imageDir();
+
+		foreach (self::IMAGE_EXTS as $ext) {
+			$file = $idCategory . '.' . $ext;
+
+			if (is_file($dir . '/' . $file)) {
+				return $file;
+			}
+		}
+
+		return null;
+	}
+
+	public static function getImageUrl(int $idCategory): string
+	{
+		global $domain;
+
+		$file = self::getImageFile($idCategory);
+
+		if ($file === null) {
+			return '';
+		}
+
+		$path = self::imageDir() . '/' . $file;
+		$url = rtrim((string) $domain, '/') . '/img/category/' . $file;
+
+		return class_exists('Performance', false)
+			? Performance::versionedUrl($url, $path)
+			: $url;
+	}
+
+	/**
+	 * @param array<string, mixed> $file $_FILES entry
+	 * @return array{success: bool, message: string}
+	 */
+	public static function saveImage(int $idCategory, array $file): array
+	{
+		if ($idCategory <= 0) {
+			return ['success' => false, 'message' => 'Kategori bulunamadı'];
+		}
+
+		if (empty($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+			return ['success' => false, 'message' => 'Dosya seçilmedi'];
+		}
+
+		if (!empty($file['error'])) {
+			return ['success' => false, 'message' => 'Dosya yüklenemedi'];
+		}
+
+		if (($file['size'] ?? 0) > 2 * 1024 * 1024) {
+			return ['success' => false, 'message' => 'Görsel en fazla 2 MB olabilir'];
+		}
+
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$mime = $finfo ? (string) finfo_file($finfo, $file['tmp_name']) : '';
+
+		if ($finfo) {
+			finfo_close($finfo);
+		}
+
+		$map = [
+			'image/jpeg' => 'jpg',
+			'image/png' => 'png',
+			'image/webp' => 'webp',
+			'image/gif' => 'gif',
+		];
+
+		if (!isset($map[$mime])) {
+			return ['success' => false, 'message' => 'Sadece JPG, PNG, WEBP veya GIF yükleyebilirsiniz'];
+		}
+
+		$dir = self::imageDir();
+
+		if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
+			return ['success' => false, 'message' => 'img/category klasörü oluşturulamadı'];
+		}
+
+		self::deleteImage($idCategory);
+
+		$target = $dir . '/' . $idCategory . '.' . $map[$mime];
+
+		if (!move_uploaded_file($file['tmp_name'], $target)) {
+			return ['success' => false, 'message' => 'Görsel kaydedilemedi'];
+		}
+
+		return ['success' => true, 'message' => 'Kategori görseli kaydedildi'];
+	}
+
+	public static function deleteImage(int $idCategory): void
+	{
+		if ($idCategory <= 0) {
+			return;
+		}
+
+		$dir = self::imageDir();
+
+		foreach (self::IMAGE_EXTS as $ext) {
+			$path = $dir . '/' . $idCategory . '.' . $ext;
+
+			if (is_file($path)) {
+				@unlink($path);
+			}
+		}
 	}
 
 	/**
 	 * Ana sayfada gösterilecek kategoriler (show_on_home=1).
-	 * Hiçbiri seçili değilse menü kategorilerine düşer (geriye uyumluluk).
+	 * Hiçbiri işaretli değilse boş döner; menüye düşmez.
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
@@ -49,11 +179,12 @@ class Category
 			 ORDER BY home_position ASC, category_name ASC'
 		) ?: [];
 
-		if ($rows === []) {
-			return self::getMenuList();
-		}
+		return array_map(static function (array $row): array {
+			$row = Lang::applyCategory($row);
+			$row['image_url'] = self::getImageUrl((int) ($row['id_category'] ?? 0));
 
-		return array_map(static fn(array $row): array => Lang::applyCategory($row), $rows);
+			return $row;
+		}, $rows);
 	}
 
 	public static function getByLink(string $link): ?array
@@ -95,10 +226,39 @@ class Category
 		return $row ? Lang::applyCategory($row) : null;
 	}
 
+	/**
+	 * Kök kategori (id_parent = 0). PrestaShop aktarımında genelde 2 (Ana Sayfa).
+	 */
+	public static function getRootId(): int
+	{
+		static $rootId = null;
+
+		if ($rootId !== null) {
+			return $rootId;
+		}
+
+		$id = DB::getValue(
+			'SELECT id_category FROM categories WHERE id_parent = 0 ORDER BY id_category ASC LIMIT 1'
+		);
+
+		$rootId = (int) ($id ?: 0);
+
+		return $rootId;
+	}
+
+	/** Üst seviye menü kategorileri (kökün doğrudan altları). */
 	public static function getMenuList(): array
 	{
+		self::ensureSchema();
+		$rootId = self::getRootId();
+
+		if ($rootId <= 0) {
+			return [];
+		}
+
 		$rows = DB::execute(
-			'SELECT * FROM categories WHERE active = 1 AND id_parent > 0 ORDER BY category_name ASC'
+			'SELECT * FROM categories WHERE active = 1 AND id_parent = ? ORDER BY category_position ASC, category_name ASC',
+			[$rootId]
 		) ?: [];
 
 		return array_map(static fn(array $row): array => Lang::applyCategory($row), $rows);
@@ -111,8 +271,9 @@ class Category
 	 */
 	public static function getProductSelectOptions(): array
 	{
+		self::ensureSchema();
 		$rows = DB::execute(
-			'SELECT * FROM categories WHERE active = 1 ORDER BY category_name ASC'
+			'SELECT * FROM categories WHERE active = 1 ORDER BY id_parent ASC, category_position ASC, category_name ASC'
 		) ?: [];
 
 		$rows = array_map(static fn(array $row): array => Lang::applyCategory($row), $rows);
@@ -217,11 +378,12 @@ class Category
 	/** Menü + alt kategoriler (mega menu için) */
 	public static function getMenuListWithChildren(): array
 	{
+		self::ensureSchema();
 		$menu = self::getMenuList();
 
 		foreach ($menu as &$cat) {
 			$children = DB::execute(
-				'SELECT * FROM categories WHERE active = 1 AND id_parent = ? ORDER BY category_name ASC',
+				'SELECT * FROM categories WHERE active = 1 AND id_parent = ? ORDER BY category_position ASC, category_name ASC',
 				[(int) $cat['id_category']]
 			) ?: [];
 			$cat['subcategories'] = array_map(static fn(array $row): array => Lang::applyCategory($row), $children);
@@ -234,12 +396,13 @@ class Category
 	/** @return array<int, array<string, mixed>> */
 	public static function getChildren(int $idParent): array
 	{
+		self::ensureSchema();
 		if ($idParent <= 0) {
 			return [];
 		}
 
 		$rows = DB::execute(
-			'SELECT * FROM categories WHERE active = 1 AND id_parent = ? ORDER BY category_name ASC',
+			'SELECT * FROM categories WHERE active = 1 AND id_parent = ? ORDER BY category_position ASC, category_name ASC',
 			[$idParent]
 		) ?: [];
 
@@ -285,18 +448,18 @@ class Category
 			return [];
 		}
 
-		$placeholders = implode(',', array_fill(0, count($categoryIds), '?'));
-
-		$rows = DB::execute(
-			'SELECT b.*, COUNT(p.id_product) AS product_count
+		$sql = 'SELECT b.*, COUNT(p.id_product) AS product_count
 			 FROM brands b
 			 INNER JOIN products p ON p.id_brand = b.id_brand AND p.active = 1
-			 WHERE b.active = 1 AND p.id_category IN (' . $placeholders . ')
+			 WHERE b.active = 1';
+		$params = [];
+		Product::appendInCategoriesSql($sql, $params, $categoryIds);
+		$sql .= '
 			 GROUP BY b.id_brand
 			 HAVING product_count > 0
-			 ORDER BY b.brand_name ASC',
-			$categoryIds
-		) ?: [];
+			 ORDER BY b.brand_name ASC';
+
+		$rows = DB::execute($sql, $params) ?: [];
 
 		return array_map(static fn(array $row): array => Lang::applyBrand($row), $rows);
 	}
@@ -308,7 +471,7 @@ class Category
 		return $domain . $category['category_link'];
 	}
 
-	public static function getAdminList(int $activeFilter = -1, int $limit = 50, int $offset = 0): array
+	public static function getAdminList(int $activeFilter = -1, int $limit = 50, int $offset = 0, string $orderBy = ''): array
 	{
 		self::ensureSchema();
 
@@ -323,9 +486,104 @@ class Category
 			$params[] = $activeFilter;
 		}
 
-		$sql .= ' ORDER BY c.show_on_home DESC, c.home_position ASC, c.id_category ASC LIMIT ' . (int) $limit . ' OFFSET ' . (int) $offset;
+		$orderBy = trim($orderBy);
+		if ($orderBy === '') {
+			$orderBy = 'c.id_parent ASC, c.category_position ASC, c.id_category ASC';
+		}
+		$sql .= ' ORDER BY ' . $orderBy . ' LIMIT ' . (int) $limit . ' OFFSET ' . (int) $offset;
 
 		return DB::execute($sql, $params) ?: [];
+	}
+
+	/** Return the admin category tree with product counts and depth. */
+	public static function getAdminTree(int $activeFilter = -1): array
+	{
+		self::ensureSchema();
+		$sql = 'SELECT c.*, p.category_name AS parent_name, (SELECT COUNT(*) FROM products pr WHERE pr.id_category = c.id_category) AS product_count,
+			(SELECT COUNT(*) FROM categories ch WHERE ch.id_parent = c.id_category) AS child_count
+			FROM categories c LEFT JOIN categories p ON c.id_parent = p.id_category';
+		$params = [];
+		if ($activeFilter >= 0) {
+			$sql .= ' WHERE c.active = ?';
+			$params[] = $activeFilter;
+		}
+		$sql .= ' ORDER BY c.category_position ASC, c.id_category ASC';
+		$rows = DB::execute($sql, $params) ?: [];
+		$byParent = [];
+		foreach ($rows as $row) {
+			$byParent[(int) $row['id_parent']][] = $row;
+		}
+		$tree = [];
+		$visited = [];
+		$walk = static function (int $parentId, int $depth) use (&$walk, &$tree, &$byParent, &$visited): void {
+			foreach ($byParent[$parentId] ?? [] as $row) {
+				$id = (int) $row['id_category'];
+				if (isset($visited[$id])) {
+					continue;
+				}
+				$visited[$id] = true;
+				$row['depth'] = $depth;
+				$row['has_children'] = !empty($byParent[$id]);
+				$tree[] = $row;
+				$walk((int) $row['id_category'], $depth + 1);
+			}
+		};
+		$walk(0, 0);
+		// Include legacy trees whose root parent is a synthetic category (for example id 1).
+		$seen = array_fill_keys(array_map(static fn(array $row): int => (int) $row['id_category'], $tree), true);
+		foreach ($rows as $row) {
+			if (!isset($seen[(int) $row['id_category']]) && !isset($visited[(int) $row['id_category']])) {
+				$row['depth'] = 0;
+				$row['has_children'] = !empty($byParent[(int) $row['id_category']]);
+				$visited[(int) $row['id_category']] = true;
+				$tree[] = $row;
+				$walk((int) $row['id_category'], 1);
+			}
+		}
+		return $tree;
+	}
+
+	/** Save category parent/order pairs sent by the admin tree editor. */
+	public static function saveAdminTree(array $items): bool
+	{
+		self::ensureSchema();
+		$all = DB::execute('SELECT id_category, id_parent FROM categories') ?: [];
+		$known = [];
+		foreach ($all as $row) {
+			$known[(int) $row['id_category']] = (int) $row['id_parent'];
+		}
+		if (count($items) !== count($known)) {
+			return false;
+		}
+		$submitted = [];
+		foreach ($items as $item) {
+			$id = (int) ($item['id'] ?? 0);
+			$parent = (int) ($item['parent'] ?? 0);
+			$position = max(0, (int) ($item['position'] ?? 0));
+			if (!isset($known[$id]) || ($parent !== 0 && !isset($known[$parent])) || $id === $parent || isset($submitted[$id])) {
+				return false;
+			}
+			$submitted[$id] = ['parent' => $parent, 'position' => $position];
+		}
+		if (count($submitted) !== count($known)) {
+			return false;
+		}
+		foreach ($submitted as $id => $row) {
+			$cursor = $row['parent'];
+			$guard = 0;
+			while ($cursor > 0 && isset($submitted[$cursor]) && $guard++ <= count($known)) {
+				if ($cursor === $id) {
+					return false;
+				}
+				$cursor = $submitted[$cursor]['parent'];
+			}
+		}
+		foreach ($submitted as $id => $row) {
+			if (DB::update('categories', ['id_parent' => $row['parent'], 'category_position' => $row['position']], 'id_category = :where_id', ['where_id' => $id]) === false) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/** Ana sayfa vitrin bayrağını aç/kapat */
@@ -345,6 +603,15 @@ class Category
 		) !== false;
 	}
 
+	public static function setActive(int $idCategory, bool $active): bool
+	{
+		self::ensureSchema();
+		if ($idCategory <= 0) {
+			return false;
+		}
+		return DB::update('categories', ['active' => $active ? 1 : 0], 'id_category = :where_id', ['where_id' => $idCategory]) !== false;
+	}
+
 	public static function countAdmin(int $activeFilter = -1): int
 	{
 		if ($activeFilter >= 0) {
@@ -358,7 +625,13 @@ class Category
 	{
 		$row = DB::getRowSafe('categories', 'id_category = ?', [$id]);
 
-		return $row ?: null;
+		if (!$row) {
+			return null;
+		}
+
+		$row['image_url'] = self::getImageUrl($id);
+
+		return $row;
 	}
 
 	public static function getParentOptions(int $excludeId = 0): array

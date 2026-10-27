@@ -47,7 +47,16 @@ if ($width > 0 && $length > 0) {
 
 switch ($action) {
 	case 'add':
-		echo json_encode(Cart::add($idProduct, $qty, $idVariation, $options, $measure));
+		$personalizationValues = Tools::getValue('personalizations', []);
+		if (is_string($personalizationValues)) {
+			$personalizationValues = json_decode($personalizationValues, true) ?: [];
+		}
+		$personalized = ProductPersonalization::collect($idProduct, $personalizationValues, $_FILES);
+		if (empty($personalized['success'])) {
+			echo json_encode(['success' => false, 'message' => (string) ($personalized['message'] ?? 'Kişiselleştirme bilgileri kontrol edilemedi')], JSON_UNESCAPED_UNICODE);
+		} else {
+			echo json_encode(Cart::add($idProduct, $qty, $idVariation, $options, $measure, $personalized['values']));
+		}
 		break;
 	case 'update':
 		echo json_encode(Cart::update($idProduct, $qty, $idVariation, $cartKey));

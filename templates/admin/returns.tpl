@@ -1,9 +1,15 @@
-<div class="ps-order-filters mb-3">
-	<a href="{$adminUrl}returns" class="ps-filter-pill{if $statusFilter == 0} active{/if}">{'All'|adminT}</a>
-	{foreach $statusOptions as $statusId => $statusLabel}
-	<a href="{$adminUrl}returns?status={$statusId}" class="ps-filter-pill{if $statusFilter == $statusId} active{/if}">{$statusLabel|escape}</a>
-	{/foreach}
+<div class="compact-filter-bar admin-panel">
+	<form method="get" action="{$adminUrl}returns" id="admReturnsFilterForm" class="compact-filter-form">
+		<select id="rt_status" name="status" class="compact-filter-select" aria-label="{'Status'|adminT}">
+			<option value="0"{if $statusFilter == 0} selected{/if}>{'Status'|adminT}: {'All'|adminT}</option>
+			{foreach $statusOptions as $statusId => $statusLabel}<option value="{$statusId}"{if $statusFilter == $statusId} selected{/if}>{'Status'|adminT}: {$statusLabel|escape}</option>{/foreach}
+		</select>
+		<button type="submit" class="compact-filter-submit">{'Filter'|adminT}</button>
+		<a href="{$adminUrl}returns" class="compact-filter-clear">{'Clear'|adminT}</a>
+		<span class="compact-filter-spacer"></span>
+	</form>
 </div>
+{include file='admin/partials/compact-filter-styles.tpl'}
 
 <div class="ps-panel">
 	<div class="ps-panel__head ps-panel__head--split">

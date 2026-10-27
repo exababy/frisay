@@ -90,6 +90,7 @@ class Module
 		}
 
 		self::ensureSchema();
+		self::ensureStarterStorefrontModules();
 		self::$booted = true;
 		self::$instances = [];
 		self::$hookListeners = [];
@@ -103,6 +104,27 @@ class Module
 		}
 
 		self::runHook('smarty.assign', [$GLOBALS['smarty'] ?? null]);
+	}
+
+	private static function ensureStarterStorefrontModules(): void
+	{
+		$theme = class_exists('Settings', false) ? trim((string) Settings::get('THEME')) : '';
+
+		if ($theme !== 'theme4') {
+			return;
+		}
+
+		foreach (['slider', 'main-menu', 'theme4'] as $name) {
+			if (self::isInstalled($name)) {
+				continue;
+			}
+
+			try {
+				self::install($name);
+			} catch (Throwable $e) {
+				// Companion modules are best-effort on existing shops.
+			}
+		}
 	}
 
 	public static function discover(): array
@@ -175,6 +197,7 @@ class Module
 			'product_inf' 		=> 'Ürün detay — {$hooks.product_inf}',
 			'order_payment' 	=> 'Ödeme Modülü — {$hooks.order_payment}',
 			'order_confirmation' => 'Sipariş onay sayfası — {$hooks.order_confirmation}',
+			'cart' => 'Sepet sayfası — {$hooks.cart}',
 			'auth_social'       => 'Giriş / kayıt — sosyal butonlar — {$hooks.auth_social}',
 			'contact_form'      => 'İletişim formu — CAPTCHA / ek alan — {$hooks.contact_form}',
 			'auth_login'        => 'Giriş formu — CAPTCHA — {$hooks.auth_login}',
@@ -286,6 +309,40 @@ class Module
 			return '';
 		}
 
+		if ($hookName === 'order_payment') {
+			global $smarty;
+
+			$selected = (string) ($context['selectedPaymentMethod'] ?? '');
+
+			if ($selected === '' && class_exists('Order', false)) {
+				$selected = Order::getSelectedPaymentMethod();
+			}
+
+			$formData = $context['formData'] ?? null;
+
+			if (!is_array($formData) && isset($smarty) && is_object($smarty)) {
+				$formData = $smarty->getTemplateVars('formData');
+			}
+
+			if (!is_array($formData)) {
+				$formData = [];
+			}
+
+			if ($selected !== '' && ($formData['payment_method'] ?? '') === '') {
+				$formData['payment_method'] = $selected;
+			} elseif ($selected === '') {
+				$selected = (string) ($formData['payment_method'] ?? '');
+			}
+
+			$context['formData'] = $formData;
+			$context['selectedPaymentMethod'] = $selected;
+
+			if (isset($smarty) && is_object($smarty)) {
+				$smarty->assign('formData', $formData);
+				$smarty->assign('selectedPaymentMethod', $selected);
+			}
+		}
+
 		$rows = DB::execute(
 			'SELECT mh.module_name
 			 FROM module_display_hooks mh
@@ -329,6 +386,7 @@ class Module
 			'product_inf',
 			'order_payment',
 			'order_confirmation',
+			'cart',
 			'auth_social',
 			'admin_product_button',
 			'admin_order_detail',
@@ -592,7 +650,7 @@ class Module
 		for ($i = 0; $i < $zip->numFiles; $i++) {
 			$entry = str_replace('\\', '/', (string) $zip->getNameIndex($i));
 
-			if (!self::isSafeZipEntry($entry, $prefix)) {
+			if (Security::isZipEntrySymlink($zip, $i) || !self::isSafeZipEntry($entry, $prefix)) {
 				self::removeDirectory($tempDir);
 				$zip->close();
 
@@ -682,6 +740,40 @@ class Module
 		self::$booted = false;
 
 		return self::ok('Modül kaldırıldı');
+	}
+
+	/** Uninstall a module and permanently remove its files from modules/. */
+	public static function deleteModule(string $name): array
+	{
+		if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $name)) {
+			return self::fail('Geçersiz modül adı');
+		}
+
+		$root = realpath(self::rootPath());
+		$path = self::path($name);
+		$realPath = realpath($path);
+		if ($root === false || $realPath === false || is_link($path) || dirname($realPath) !== $root) {
+			return self::fail('Modül dosyaları bulunamadı veya güvenli değil');
+		}
+
+		if (self::isInstalled($name)) {
+			$result = self::uninstall($name);
+			if (empty($result['success'])) {
+				return $result;
+			}
+		} else {
+			DB::execute('DELETE FROM modules WHERE name = ?', [$name]);
+			DB::execute('DELETE FROM module_display_hooks WHERE module_name = ?', [$name]);
+			unset(self::$instances[$name]);
+		}
+
+		self::removeDirectory($realPath);
+		if (is_dir($realPath)) {
+			return self::fail('Modül veritabanından kaldırıldı ancak dosyaları silinemedi');
+		}
+		self::$booted = false;
+
+		return self::ok('Modül kaldırıldı ve dosyaları silindi');
 	}
 
 	public static function setActive(string $name, bool $active): array
@@ -1181,11 +1273,7 @@ class Module
 	{
 		$entry = str_replace('\\', '/', $entry);
 
-		if ($entry === '' || strpos($entry, "\0") !== false) {
-			return false;
-		}
-
-		if ($entry[0] === '/' || strpos($entry, '../') !== false || substr($entry, -3) === '/..') {
+		if (Security::isUnsafeZipPath($entry)) {
 			return false;
 		}
 

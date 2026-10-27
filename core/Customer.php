@@ -96,14 +96,12 @@ class Customer
 			return self::fail($passwordError);
 		}
 
-		$exists = DB::getValue('SELECT id_user FROM users WHERE phone = ? LIMIT 1', [$phone]);
-		if ($exists) {
-			return self::fail('Bu telefon numarası zaten kayıtlı');
+		if (self::phoneIsRegistered($phone)) {
+			return self::fail(translate('This phone is already registered'));
 		}
 
-		$emailExists = DB::getValue('SELECT id_user FROM users WHERE email = ? LIMIT 1', [$email]);
-		if ($emailExists) {
-			return self::fail('Bu e-posta adresi zaten kayıtlı');
+		if (self::emailIsRegistered($email)) {
+			return self::fail(translate('This email is already registered'));
 		}
 
 		$isActive = self::shouldActivateNewMember() ? 1 : 0;
@@ -128,14 +126,49 @@ class Customer
 			Notification::welcome((int) $id, $fullName);
 			Mail::sendWelcome($email, $fullName);
 
-			return self::ok(translate('Registration successful'));
+			return [
+				'success' => true,
+				'message' => translate('Registration successful'),
+				'id_user' => (int) $id,
+			];
+		}
+
+		if (class_exists('Order', false)) {
+			try {
+				Order::attachGuestOrdersToUser((int) $id);
+			} catch (Throwable $e) {
+				error_log('attachGuestOrdersToUser: ' . $e->getMessage());
+			}
 		}
 
 		return [
 			'success' => true,
 			'message' => translate('Your registration was received. You can sign in after admin approval.'),
 			'user' => null,
+			'id_user' => (int) $id,
 		];
+	}
+
+	public static function emailIsRegistered(string $email): bool
+	{
+		$email = strtolower(trim($email));
+
+		if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return false;
+		}
+
+		return (int) DB::getValue('SELECT id_user FROM users WHERE email = ? LIMIT 1', [$email]) > 0;
+	}
+
+	public static function phoneIsRegistered(string $phone): bool
+	{
+		$phone = self::normalizePhone($phone);
+
+		if ($phone === '' || !self::isValidPhone($phone)) {
+			return false;
+		}
+
+		return (int) DB::getValue('SELECT id_user FROM users WHERE phone = ? LIMIT 1', [$phone]) > 0;
 	}
 
 	public static function login(string $login, string $password, bool $remember = true): array
@@ -143,8 +176,11 @@ class Customer
 		$login = trim($login);
 		$rateKey = RateLimit::loginIdentifier($login !== '' ? $login : 'empty');
 
-		if (RateLimit::isLimited(RateLimit::SCOPE_CUSTOMER_LOGIN, $rateKey, 8, 900)) {
-			return self::fail('Çok fazla başarısız giriş denemesi. Lütfen 15 dakika sonra tekrar deneyin.');
+		$maxAttempts = SecuritySettings::getCustomerLoginMaxAttempts();
+		$windowSeconds = SecuritySettings::getCustomerLoginWindowSeconds();
+
+		if (RateLimit::isLimited(RateLimit::SCOPE_CUSTOMER_LOGIN, $rateKey, $maxAttempts, $windowSeconds)) {
+			return self::fail(SecuritySettings::loginLockMessage((int) ($windowSeconds / 60)));
 		}
 
 		$user = null;
@@ -191,6 +227,7 @@ class Customer
 	{
 		session_regenerate_id(true);
 		$_SESSION['id_user'] = $idUser;
+		$_SESSION['customer_last_active'] = time();
 
 		if (class_exists('GroupPricing', false)) {
 			GroupPricing::resetCache();
@@ -199,6 +236,83 @@ class Customer
 		if ($remember) {
 			Cookie::issueRememberToken($idUser);
 		}
+
+		if (class_exists('Order', false)) {
+			try {
+				Order::attachGuestOrdersToUser($idUser);
+			} catch (Throwable $e) {
+				error_log('attachGuestOrdersToUser: ' . $e->getMessage());
+			}
+		}
+	}
+
+	/** Start a temporary storefront session as a customer while retaining the admin session. */
+	public static function startAdminImpersonation(int $idUser): bool
+	{
+		if ($idUser <= 0 || !Admin::isLoggedIn()) {
+			return false;
+		}
+		$user = DB::getRowSafe('users', 'id_user = ? AND active = 1', [$idUser]);
+		if (!$user) {
+			return false;
+		}
+		$sessionKeys = [Cart::SESSION_KEY, Cart::META_KEY, Coupon::SESSION_KEY, Order::PAYMENT_SESSION_KEY, Order::GIFT_WRAP_SESSION_KEY, Cargo::SESSION_KEY];
+		$previous = [];
+		foreach ($sessionKeys as $key) {
+			$previous[$key] = ['exists' => array_key_exists($key, $_SESSION), 'value' => $_SESSION[$key] ?? null];
+			unset($_SESSION[$key]);
+		}
+		$_SESSION['admin_impersonation'] = [
+			'admin_id' => Admin::getId(),
+			'customer_id' => $idUser,
+			'customer_name' => (string) ($user['user_full_name'] ?? ''),
+			'previous_customer_id' => (int) ($_SESSION['id_user'] ?? 0),
+			'previous_customer_last_active' => (int) ($_SESSION['customer_last_active'] ?? 0),
+			'previous_session_data' => $previous,
+			'started_at' => time(),
+		];
+		session_regenerate_id(true);
+		$_SESSION['id_user'] = $idUser;
+		$_SESSION['customer_last_active'] = time();
+		if (class_exists('GroupPricing', false)) {
+			GroupPricing::resetCache();
+		}
+		return true;
+	}
+
+	/** Restore the browser's prior storefront session after temporary admin impersonation. */
+	public static function stopAdminImpersonation(): bool
+	{
+		$state = $_SESSION['admin_impersonation'] ?? null;
+		if (!is_array($state) || (int) ($_SESSION['id_user'] ?? 0) !== (int) ($state['customer_id'] ?? 0)) {
+			return false;
+		}
+		$previousId = (int) ($state['previous_customer_id'] ?? 0);
+		if ($previousId > 0 && !DB::getRowSafe('users', 'id_user = ? AND active = 1', [$previousId])) {
+			$previousId = 0;
+		}
+		$_SESSION['id_user'] = $previousId;
+		if ($previousId > 0) {
+			$_SESSION['customer_last_active'] = (int) ($state['previous_customer_last_active'] ?? time());
+		} else {
+			unset($_SESSION['id_user'], $_SESSION['customer_last_active']);
+		}
+		foreach ((array) ($state['previous_session_data'] ?? []) as $key => $entry) {
+			if (!is_array($entry)) {
+				continue;
+			}
+			if (!empty($entry['exists'])) {
+				$_SESSION[$key] = $entry['value'] ?? null;
+			} else {
+				unset($_SESSION[$key]);
+			}
+		}
+		unset($_SESSION['admin_impersonation']);
+		session_regenerate_id(true);
+		if (class_exists('GroupPricing', false)) {
+			GroupPricing::resetCache();
+		}
+		return true;
 	}
 
 	public static function logout(): void
@@ -211,7 +325,7 @@ class Customer
 		}
 
 		Cookie::clearRememberCookie();
-		unset($_SESSION['id_user']);
+		unset($_SESSION['id_user'], $_SESSION['customer_last_active']);
 
 		if (class_exists('GroupPricing', false)) {
 			GroupPricing::resetCache();
@@ -552,6 +666,13 @@ class Customer
 	public static function requestPasswordReset(string $email): array
 	{
 		$email = trim(strtolower($email));
+		$identifier = RateLimit::loginIdentifier($email !== '' ? $email : 'empty');
+
+		if (RateLimit::isLimited(RateLimit::SCOPE_CUSTOMER_PASSWORD_RESET, $identifier, 5, 3600)) {
+			return self::fail('Çok fazla şifre sıfırlama isteği. Lütfen daha sonra tekrar deneyin.');
+		}
+
+		RateLimit::record(RateLimit::SCOPE_CUSTOMER_PASSWORD_RESET, $identifier);
 
 		if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			return self::fail('Geçerli bir e-posta adresi girin');

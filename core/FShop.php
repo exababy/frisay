@@ -2,7 +2,7 @@
 
 class FShop
 {
-	public const VERSION = '2.5.6';
+	public const VERSION = '3.0.2';
 	public const NAME = 'FriSay';
 
 	public static function version(): string

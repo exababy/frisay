@@ -14,6 +14,23 @@
 		return;
 	}
 
+	if (Tools::isSubmit('impersonateCustomer')) {
+		$postToken = (string) Tools::getValue('token');
+		if (!hash_equals((string) $adminToken, $postToken)) {
+			$flash = adminT('Invalid request');
+			$flashType = 'danger';
+		} elseif (!(int) ($customer['active'] ?? 0)) {
+			$flash = 'Pasif müşteri hesabında oturum açılamaz.';
+			$flashType = 'danger';
+		} elseif (Customer::startAdminImpersonation($idUser)) {
+			header('Location: ' . rtrim((string) $domain, '/') . '/');
+			exit;
+		} else {
+			$flash = 'Müşteri hesabı açılamadı.';
+			$flashType = 'danger';
+		}
+	}
+
 	if (Tools::isSubmit('toggleActive')) {
 		$postToken = (string) Tools::getValue('token');
 
@@ -97,8 +114,24 @@
 		}
 	}
 
+	$customerOrders = is_array($customer['orders'] ?? null) ? $customer['orders'] : [];
+	$ordersTotal = 0.0;
+	foreach ($customerOrders as $customerOrder) {
+		if (!in_array((int) ($customerOrder['status'] ?? -1), [Order::STATUS_CANCELLED, Order::STATUS_RETURNED], true)) {
+			$ordersTotal += (float) ($customerOrder['total'] ?? 0);
+		}
+	}
+	$nameParts = preg_split('/\s+/u', trim((string) ($customer['user_full_name'] ?? '')), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+	$customerInitials = '';
+	foreach (array_slice($nameParts, 0, 2) as $part) {
+		$customerInitials .= function_exists('mb_substr') ? mb_strtoupper(mb_substr($part, 0, 1, 'UTF-8'), 'UTF-8') : strtoupper(substr($part, 0, 1));
+	}
 	$smarty->assign([
 		'customer' => $customer,
+		'customerInitials' => $customerInitials !== '' ? $customerInitials : 'M',
+		'customerOrderCount' => count($customerOrders),
+		'customerOrdersTotalFormatted' => Tools::displayPrice($ordersTotal),
+		'customerLastOrderDate' => (string) ($customerOrders[0]['date_formatted'] ?? ''),
 		'flash' => $flash,
 		'flashType' => $flashType,
 		'customerGroups' => class_exists('CustomerGroup', false) ? CustomerGroup::getActiveOptions() : [],

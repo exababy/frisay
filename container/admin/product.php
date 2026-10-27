@@ -10,6 +10,12 @@
 	$pLink 		= '';
 	$isNew 		= $id <= 0;
 
+	if (!empty($_SESSION['admin_flash']) && is_array($_SESSION['admin_flash'])) {
+		$flash = (string) ($_SESSION['admin_flash']['message'] ?? '');
+		$flashType = (string) ($_SESSION['admin_flash']['type'] ?? 'success');
+		unset($_SESSION['admin_flash']);
+	}
+
 	if (!$isNew && !$product) {
 		http_response_code(404);
 		AdminPage::add('404', 'Product not found');
@@ -325,6 +331,7 @@
 		'virtual_file' 		=> '',
 		'virtual_file_name' => '',
 		'images' 			=> [],
+		'extra_category_ids' => [],
 	];
 
 	$licenseStats = ['available' => 0, 'used' => 0];
@@ -371,12 +378,14 @@
 	$variationRows = [];
 	$hasVariations = false;
 	$optionRows = [];
+	$personalizationRows = [];
 
 	if (!$isNew) {
 		$rawVariations = ProductVariation::getByProduct($id);
 		$hasVariations = $rawVariations !== [];
 		$variationRows = array_map([ProductVariation::class, 'formatFormRow'], $rawVariations);
 		$optionRows = array_map([ProductOption::class, 'formatFormRow'], ProductOption::getByProduct($id));
+		$personalizationRows = array_map([ProductPersonalization::class, 'formatFormRow'], ProductPersonalization::getByProduct($id));
 	}
 
 	$smarty->assign([
@@ -385,6 +394,7 @@
 		'variationRows'     => $variationRows,
 		'hasVariations'     => $hasVariations,
 		'optionRows'        => $optionRows,
+		'personalizationRows' => $personalizationRows,
 		'shopLanguages' 	=> Lang::getAvailable(),
 		'idProduct' 		=> $id,
 		'isNew' 			=> $isNew,
@@ -407,6 +417,7 @@
 		],
 		'shopCurrencyLabel' => Currency::label(),
 		'taxOptions' => Tax::getProductOptions((float) ($form['vat'] ?? Tax::getDefaultRate())),
+		'extraCategoryIds' => array_map('intval', $form['extra_category_ids'] ?? []),
 	]);
 
 	AdminPage::add('product', $isNew ? 'New Product' : 'Edit product');

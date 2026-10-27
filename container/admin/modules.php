@@ -68,6 +68,10 @@ if (Tools::isSubmit('moduleAction')) {
 		$action = trim((string) Tools::getValue('action'));
 
 		switch ($action) {
+			case 'delete':
+				$result = Module::deleteModule($name);
+				break;
+
 			case 'install':
 				$result = Module::install($name);
 				break;

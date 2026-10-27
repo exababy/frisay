@@ -13,12 +13,20 @@
 		</div>
 	</div>
 {/if}
-<div class="admin-toolbar d-flex flex-wrap gap-2 mb-3">
-	<a href="{$adminUrl}brands" class="btn btn-sm {if $activeFilter == -1}btn-dark{else}btn-outline-dark{/if}">{'All'|adminT}</a>
-	<a href="{$adminUrl}brands?active=1" class="btn btn-sm {if $activeFilter == 1}btn-dark{else}btn-outline-dark{/if}">{'Active'|adminT}</a>
-	<a href="{$adminUrl}brands?active=0" class="btn btn-sm {if $activeFilter == 0}btn-dark{else}btn-outline-dark{/if}">{'Inactive'|adminT}</a>
-	<a href="{$adminUrl}brand" class="btn btn-sm btn-primary ms-auto">{'+ New brand'|adminT}</a>
+<div class="compact-filter-bar admin-panel">
+	<form method="get" action="{$adminUrl}brands" id="admBrandsFilterForm" class="compact-filter-form">
+		<select id="br_active" name="active" class="compact-filter-select" aria-label="{'Status'|adminT}">
+			<option value="-1"{if $activeFilter == -1} selected{/if}>{'Status'|adminT}: {'All'|adminT}</option>
+			<option value="1"{if $activeFilter == 1} selected{/if}>{'Status'|adminT}: {'Active'|adminT}</option>
+			<option value="0"{if $activeFilter == 0} selected{/if}>{'Status'|adminT}: {'Inactive'|adminT}</option>
+		</select>
+		<button type="submit" class="compact-filter-submit">{'Filter'|adminT}</button>
+		<a href="{$adminUrl}brands" class="compact-filter-clear">{'Clear'|adminT}</a>
+		<span class="compact-filter-spacer"></span>
+		<a href="{$adminUrl}brand" class="btn btn-primary compact-filter-add">{'+ New brand'|adminT}</a>
+	</form>
 </div>
+{include file='admin/partials/compact-filter-styles.tpl'}
 
 <div class="admin-panel p-0">
 	<div class="table-responsive">

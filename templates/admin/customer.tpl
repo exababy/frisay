@@ -13,9 +13,37 @@
 		</div>
 	</div>
 {/if}
+<style>
+{literal}
+.customer-profile{border:1px solid #e5e9e6;border-radius:16px;background:#fff;padding:24px;margin-bottom:22px;box-shadow:0 5px 18px rgba(25,42,36,.04)}
+.customer-profile__top{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.customer-profile__avatar{width:62px;height:62px;border-radius:18px;background:#e8f3ec;color:#287b55;display:grid;place-items:center;font-size:22px;font-weight:700}.customer-profile__identity{flex:1;min-width:210px}.customer-profile__identity h1{font-size:22px;margin:0 0 5px;color:#20352b}.customer-profile__identity p{margin:0;color:#69776e;font-size:13px}.customer-profile__actions{display:flex;gap:8px;flex-wrap:wrap}.customer-profile__stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}.customer-profile__stat{background:#f7f9f7;border:1px solid #edf0ed;border-radius:12px;padding:13px 16px}.customer-profile__stat small{display:block;color:#748078;margin-bottom:4px}.customer-profile__stat strong{color:#20352b;font-size:17px}.customer-detail-card{border:1px solid #e5e9e6;border-radius:14px;background:#fff;padding:20px;margin-bottom:16px}.customer-detail-card h2{font-size:15px;font-weight:650;margin:0 0 18px;color:#263a30}.customer-detail-card .form-label{font-size:13px;color:#58675e}.customer-order-table thead th{font-size:12px;color:#718077;font-weight:600;border-bottom-color:#e8ece9}.customer-order-table td{padding-top:12px;padding-bottom:12px}@media(max-width:700px){.customer-profile__stats{grid-template-columns:1fr}.customer-profile{padding:18px}.customer-profile__actions{width:100%}}
+{/literal}
+</style>
+<section class="customer-profile">
+	<div class="customer-profile__top">
+		<div class="customer-profile__avatar">{$customerInitials|escape}</div>
+		<div class="customer-profile__identity">
+			<h1>{$customer.user_full_name|escape}</h1>
+			<p>Müşteri #{$customer.id_user} · {$customer.email|default:'E-posta yok'|escape} · {$customer.phone|default:'Telefon yok'|escape}</p>
+		</div>
+		<div class="customer-profile__actions">
+			<a class="btn btn-dark" href="{$adminUrl}order-create?customer_id={$customer.id_user}">Bu müşteriye sipariş girişi yap</a>
+			<form method="post" action="{$adminUrl}customer?id={$customer.id_user}" target="_blank">
+				<input type="hidden" name="impersonateCustomer" value="1"><input type="hidden" name="token" value="{$adminToken}">
+				<button class="btn btn-outline-dark" type="submit">Müşteri olarak giriş yap</button>
+			</form>
+			<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#customerContactModal">Müşteriyle iletişim</button>
+		</div>
+	</div>
+	<div class="customer-profile__stats">
+		<div class="customer-profile__stat"><small>Sipariş sayısı</small><strong>{$customerOrderCount|default:0}</strong></div>
+		<div class="customer-profile__stat"><small>Tamamlanan sipariş tutarı</small><strong>{$customerOrdersTotalFormatted|default:'₺0,00'|escape}</strong></div>
+		<div class="customer-profile__stat"><small>Son sipariş</small><strong>{$customerLastOrderDate|default:'Henüz sipariş yok'|escape}</strong></div>
+	</div>
+</section>
 <div class="row g-4">
 	<div class="col-lg-4">
-		<form method="post" class="admin-panel p-3 mb-4">
+		<form method="post" class="customer-detail-card">
 			<input type="hidden" name="saveCustomer" value="1">
 			<input type="hidden" name="token" value="{$adminToken}">
 			<h2 class="h6 mb-3">{'Customer information'|adminT}</h2>
@@ -56,12 +84,9 @@
 			</p>
 
 			<button type="submit" class="btn btn-dark btn-sm">{'Save information'|adminT}</button>
-			<button type="button" class="btn btn-outline-primary btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#customerContactModal">
-				{'Contact customer'|adminT}
-			</button>
 		</form>
 
-		<form method="post" class="admin-panel p-3 mb-4">
+		<form method="post" class="customer-detail-card">
 			<input type="hidden" name="saveCustomerPassword" value="1">
 			<input type="hidden" name="token" value="{$adminToken}">
 			<h2 class="h6 mb-3">{'Change password'|adminT}</h2>
@@ -77,7 +102,7 @@
 			<button type="submit" class="btn btn-outline-dark btn-sm">{'Update password'|adminT}</button>
 		</form>
 
-		<form method="post" class="admin-panel p-3">
+		<form method="post" class="customer-detail-card">
 			<input type="hidden" name="toggleActive" value="1">
 			<input type="hidden" name="token" value="{$adminToken}">
 			<h2 class="h6 mb-3">{'Account status'|adminT}</h2>
@@ -88,11 +113,11 @@
 	</div>
 
 	<div class="col-lg-8">
-		<div class="admin-panel p-3">
+		<div class="customer-detail-card">
 			<h2 class="h6 mb-3">{'Order history'|adminT}</h2>
 			{if $customer.orders|@count}
 			<div class="table-responsive">
-				<table class="table table-sm align-middle mb-0">
+				<table class="table table-sm align-middle mb-0 customer-order-table">
 					<thead>
 						<tr>
 							<th>{'Reference'|adminT}</th>

@@ -135,6 +135,21 @@
 						</div>
 					</div>
 
+					<div class="pe-card mt-3" id="productPersonalizationWrap">
+						<input type="hidden" name="personalization_fields_present" value="1">
+						<div class="pe-card-head"><div><h2>Kişiselleştirme alanları</h2><p>Müşteriden yazı, tarih veya görsel gibi ürüne özel bilgi alın.</p></div><button type="button" class="btn btn-sm btn-outline-dark" id="addPersonalizationField">Alan ekle</button></div>
+						<div id="personalizationFieldsBody">
+							{foreach $personalizationRows as $idx => $field}
+							<div class="personalization-field-row row g-2 align-items-end border rounded p-2 mb-2 bg-white">
+								<div class="col-md-5"><label class="form-label small">Alan başlığı</label><input class="form-control form-control-sm" name="personalization_fields[{$idx}][label]" value="{$field.label|escape}" placeholder="Örn. Bardağa yazılacak isim"></div>
+								<div class="col-md-3"><label class="form-label small">Alan türü</label><select class="form-select form-select-sm" name="personalization_fields[{$idx}][type]"><option value="text"{if $field.type == 'text'} selected{/if}>Yazı</option><option value="date"{if $field.type == 'date'} selected{/if}>Tarih</option><option value="image"{if $field.type == 'image'} selected{/if}>Görsel</option></select></div>
+								<div class="col-md-2"><input type="hidden" name="personalization_fields[{$idx}][required]" value="0"><label class="form-check small mb-2"><input class="form-check-input" type="checkbox" name="personalization_fields[{$idx}][required]" value="1"{if $field.required} checked{/if}> Zorunlu</label></div>
+								<div class="col-md-2 text-end"><button type="button" class="btn btn-sm btn-outline-danger personalization-field-remove">Kaldır</button></div>
+							</div>
+							{/foreach}
+						</div>
+					</div>
+
 					<div class="pe-card">
 						<div class="pe-card-head">
 							<div>
@@ -173,6 +188,19 @@
 									<option value="{$s.id_supplier}"{if ($product.id_supplier|default:0) == $s.id_supplier} selected{/if}>{$s.supplier_name|escape}</option>
 									{/foreach}
 								</select>
+							</div>
+							<div class="col-12">
+								<input type="hidden" name="extra_categories_present" value="1">
+								<label class="form-label">{'Also show in'|adminT}</label>
+								<div id="extraCategoryList" class="border rounded p-2" style="max-height:220px;overflow:auto">
+									{foreach $categoryOptions as $cat}
+									<div class="form-check" data-extra-cat="{$cat.id_category}">
+										<input class="form-check-input" type="checkbox" name="extra_category_ids[]" value="{$cat.id_category}" id="extraCat{$cat.id_category}"{if $extraCategoryIds && in_array($cat.id_category, $extraCategoryIds)} checked{/if}>
+										<label class="form-check-label" for="extraCat{$cat.id_category}">{$cat.category_name|escape}</label>
+									</div>
+									{/foreach}
+								</div>
+								<div class="form-text">{'Default category is chosen above. Tick others to list this product on those category pages too.'|adminT}</div>
 							</div>
 						</div>
 					</div>
@@ -242,8 +270,7 @@
 													<th>{'Barcode'|adminT}</th>
 													<th>{'Price'|adminT}</th>
 													<th>{'Stock'|adminT}</th>
-													<th>{'Active'|adminT}</th>
-													<th class="text-end" style="width:48px;"></th>
+													<th class="text-center">{'Active'|adminT}</th>
 												</tr>
 											</thead>
 											<tbody id="variationsBody">
@@ -257,12 +284,16 @@
 													<td><input type="text" name="variations[{$idx}][barcode]" class="form-control form-control-sm" value="{$var.barcode|escape}"></td>
 													<td><input type="text" name="variations[{$idx}][price]" class="form-control form-control-sm" value="{$var.price|escape}" placeholder="{'Empty = base price'|adminT}"></td>
 													<td><input type="number" name="variations[{$idx}][stock]" class="form-control form-control-sm variation-stock-input" value="{$var.stock|escape}" min="0"></td>
-													<td class="text-center">
-														<input type="hidden" name="variations[{$idx}][id_variation]" value="{$var.id_variation|escape}">
-														<input type="checkbox" name="variations[{$idx}][active]" value="1" class="form-check-input"{if $var.active} checked{/if}>
-													</td>
-													<td class="text-end">
-														<button type="button" class="btn btn-sm btn-outline-danger variation-remove" title="{'Remove row'|adminT}">&times;</button>
+													<td class="variation-row__actions">
+														<div class="variation-row__actions-inner">
+															<input type="hidden" name="variations[{$idx}][id_variation]" value="{$var.id_variation|escape}">
+															<div class="form-check form-switch">
+																<input class="form-check-input" type="checkbox" role="switch" name="variations[{$idx}][active]" value="1" aria-label="{'Active'|adminT}"{if $var.active} checked{/if}>
+															</div>
+															<button type="button" class="variation-remove" title="{'Remove row'|adminT}" aria-label="{'Remove row'|adminT}">
+																<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+															</button>
+														</div>
 													</td>
 												</tr>
 												{/foreach}
@@ -634,6 +665,10 @@
 			</div>
 
 			<div class="ml-nav">
+				<button type="button" class="btn btn-sm btn-outline-dark ml-up-btn" data-ml-up disabled title="{'Parent folder'|adminT}">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+					{'Parent folder'|adminT}
+				</button>
 				<div class="ml-breadcrumbs" data-ml-crumbs></div>
 				<button type="button" class="btn btn-sm btn-outline-secondary" data-ml-refresh>{'Refresh'|adminT}</button>
 			</div>
@@ -722,6 +757,11 @@ window.productCatalogQuickConfig = {
 	parentRootLabel: "{'None (root)'|adminT|escape:'javascript'}"
 };
 </script>
+<script>
+{literal}
+(function(){var body=document.getElementById('personalizationFieldsBody'),add=document.getElementById('addPersonalizationField');if(!body||!add)return;function renumber(){body.querySelectorAll('.personalization-field-row').forEach(function(row,index){row.querySelectorAll('[name]').forEach(function(input){input.name=input.name.replace(/personalization_fields\[\d+\]/,'personalization_fields['+index+']')})})}add.addEventListener('click',function(){var index=body.querySelectorAll('.personalization-field-row').length,row=document.createElement('div');row.className='personalization-field-row row g-2 align-items-end border rounded p-2 mb-2 bg-white';row.innerHTML='<div class="col-md-5"><label class="form-label small">Alan başlığı</label><input class="form-control form-control-sm" name="personalization_fields['+index+'][label]" placeholder="Örn. Bardağa yazılacak isim"></div><div class="col-md-3"><label class="form-label small">Alan türü</label><select class="form-select form-select-sm" name="personalization_fields['+index+'][type]"><option value="text">Yazı</option><option value="date">Tarih</option><option value="image">Görsel</option></select></div><div class="col-md-2"><input type="hidden" name="personalization_fields['+index+'][required]" value="0"><label class="form-check small mb-2"><input class="form-check-input" type="checkbox" name="personalization_fields['+index+'][required]" value="1"> Zorunlu</label></div><div class="col-md-2 text-end"><button type="button" class="btn btn-sm btn-outline-danger personalization-field-remove">Kaldır</button></div>';body.appendChild(row)});body.addEventListener('click',function(e){var button=e.target.closest('.personalization-field-remove');if(button){button.closest('.personalization-field-row').remove();renumber()}})})();
+{/literal}
+</script>
 <script src="{$domain}templates/admin/js/product-catalog-quick.js?v={$smarty.now}"></script>
 <script>
 (function () {
@@ -737,6 +777,8 @@ window.productCatalogQuickConfig = {
 	var saleUnitWrap = document.getElementById('saleUnitWrap');
 	var saleQtyMinWrap = document.getElementById('saleQtyMinWrap');
 	var saleQtyStepWrap = document.getElementById('saleQtyStepWrap');
+	var saleQtyMinEl = document.getElementById('saleQtyMin');
+	var saleQtyStepEl = document.getElementById('saleQtyStep');
 	var m2StockHint = document.getElementById('m2StockHint');
 	var priceLabel = document.getElementById('productPriceLabel');
 	var stockLabel = document.getElementById('productStockLabel');
@@ -759,6 +801,70 @@ window.productCatalogQuickConfig = {
 		tabPanes.forEach(function (pane) {
 			var isActive = pane.getAttribute('data-tab') === tabName;
 			pane.classList.toggle('pe-tab-pane--active', isActive);
+		});
+	}
+
+	function fieldLabel(el) {
+		if (!el) {
+			return '';
+		}
+		if (el.id) {
+			var forLabel = document.querySelector('label[for="' + el.id + '"]');
+			if (forLabel) {
+				return forLabel.textContent.replace(/\*/g, '').replace(/\s+/g, ' ').trim();
+			}
+		}
+		var wrap = el.closest('.col-md-3, .col-md-4, .col-md-6, .col-md-8, .mb-3, .pe-card');
+		var label = wrap ? wrap.querySelector('.form-label, label') : null;
+		if (label) {
+			return label.textContent.replace(/\*/g, '').replace(/\s+/g, ' ').trim();
+		}
+		return (el.getAttribute('placeholder') || '').trim();
+	}
+
+	function revealInvalidField(el) {
+		var pane = el.closest('.pe-tab-pane');
+		if (pane && pane.getAttribute('data-tab')) {
+			switchTab(pane.getAttribute('data-tab'));
+		}
+		var langPane = el.closest('.tab-pane');
+		if (langPane && !langPane.classList.contains('active') && langPane.id) {
+			var langBtn = document.querySelector('[data-bs-target="#' + langPane.id + '"]');
+			if (langBtn) {
+				langBtn.click();
+			}
+		}
+	}
+
+	var productForm = document.getElementById('productForm');
+	var requiredMsg = {'This field is required'|adminT|@json_encode nofilter};
+	if (productForm) {
+		productForm.setAttribute('novalidate', 'novalidate');
+		productForm.addEventListener('submit', function (e) {
+			if (productForm.checkValidity()) {
+				return;
+			}
+			e.preventDefault();
+			e.stopPropagation();
+			var invalid = productForm.querySelector(':invalid');
+			if (!invalid) {
+				return;
+			}
+			revealInvalidField(invalid);
+			window.setTimeout(function () {
+				try {
+					invalid.focus();
+					invalid.scrollIntoView({ block: 'center', behavior: 'smooth' });
+				} catch (err) {}
+				if (typeof invalid.reportValidity === 'function') {
+					invalid.reportValidity();
+				}
+				var label = fieldLabel(invalid);
+				var message = label ? (label + ' — ' + requiredMsg) : requiredMsg;
+				if (window.AdminToast) {
+					AdminToast.show(message, 'warning');
+				}
+			}, 60);
 		});
 	}
 
@@ -789,6 +895,8 @@ window.productCatalogQuickConfig = {
 		if (saleUnitWrap) saleUnitWrap.style.display = isPhysical ? '' : 'none';
 		if (saleQtyMinWrap) saleQtyMinWrap.style.display = isM2 ? '' : 'none';
 		if (saleQtyStepWrap) saleQtyStepWrap.style.display = isM2 ? '' : 'none';
+		if (saleQtyMinEl) saleQtyMinEl.disabled = !isM2;
+		if (saleQtyStepEl) saleQtyStepEl.disabled = !isM2;
 		if (m2StockHint) m2StockHint.style.display = isM2 ? '' : 'none';
 		if (priceLabel) {
 			priceLabel.textContent = isM2
@@ -955,5 +1063,33 @@ window.productCatalogQuickConfig = {
 			});
 		});
 	});
+})();
+</script>
+<script>
+(function () {
+	function syncProductExtraCategories() {
+		var main = document.getElementById('productCategorySelect');
+		var extras = document.getElementById('extraCategoryList');
+		if (!main || !extras) {
+			return;
+		}
+		var id = String(main.value || '');
+		extras.querySelectorAll('[data-extra-cat]').forEach(function (row) {
+			var isMain = String(row.getAttribute('data-extra-cat')) === id;
+			row.style.display = isMain ? 'none' : '';
+			if (isMain) {
+				var cb = row.querySelector('input[type="checkbox"]');
+				if (cb) {
+					cb.checked = false;
+				}
+			}
+		});
+	}
+	window.syncProductExtraCategories = syncProductExtraCategories;
+	var main = document.getElementById('productCategorySelect');
+	if (main) {
+		main.addEventListener('change', syncProductExtraCategories);
+	}
+	syncProductExtraCategories();
 })();
 </script>

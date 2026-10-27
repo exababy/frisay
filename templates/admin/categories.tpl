@@ -13,80 +13,47 @@
 		</div>
 	</div>
 {/if}
-<div class="admin-toolbar d-flex flex-wrap gap-2 mb-3">
-	<a href="{$adminUrl}categories" class="btn btn-sm {if $activeFilter == -1}btn-dark{else}btn-outline-dark{/if}">{'All'|adminT}</a>
-	<a href="{$adminUrl}categories?active=1" class="btn btn-sm {if $activeFilter == 1}btn-dark{else}btn-outline-dark{/if}">{'Active'|adminT}</a>
-	<a href="{$adminUrl}categories?active=0" class="btn btn-sm {if $activeFilter == 0}btn-dark{else}btn-outline-dark{/if}">{'Inactive'|adminT}</a>
-	<a href="{$adminUrl}category" class="btn btn-sm btn-primary ms-auto">{'Add New'|adminT}</a>
+<div class="category-filter-bar admin-panel">
+	<form method="get" action="{$adminUrl}categories" id="admCategoriesFilterForm" class="category-filter-form">
+		<label class="category-filter-search"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="search" name="q" value="{$categorySearch|escape}" placeholder="Kategori adı ya da kısa adı" aria-label="Kategori adı ya da kısa adı"></label>
+		<select name="active" class="category-filter-select" aria-label="Durum"><option value="-1"{if $activeFilter == -1} selected{/if}>Durum: tümü</option><option value="1"{if $activeFilter == 1} selected{/if}>Durum: aktif</option><option value="0"{if $activeFilter == 0} selected{/if}>Durum: pasif</option></select>
+		<select name="menu" class="category-filter-select" aria-label="Menü"><option value="all"{if $categoryMenuFilter == 'all'} selected{/if}>Menü: tümü</option><option value="top"{if $categoryMenuFilter == 'top'} selected{/if}>Menü: ana kategoriler</option><option value="child"{if $categoryMenuFilter == 'child'} selected{/if}>Menü: alt kategoriler</option></select>
+		<button type="submit" class="btn category-filter-submit">Filtrele</button><a href="{$adminUrl}categories" class="category-filter-clear">Temizle</a><span class="category-filter-spacer"></span><a href="{$adminUrl}category" class="btn btn-primary category-filter-add">Yeni kategori ekle</a>
+	</form>
 </div>
+<style>
+{literal}
+.category-filter-bar{padding:14px 16px;border:1px solid #e2e5df;border-radius:15px;margin-bottom:14px}.category-filter-form{display:flex;align-items:center;gap:10px;width:100%}.category-filter-search{height:44px;flex:1 1 360px;min-width:220px;display:flex;align-items:center;gap:10px;padding:0 14px;border:1px solid #aeb5ad;border-radius:11px;color:#626b78}.category-filter-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;font-size:14px}.category-filter-search:focus-within{border-color:#287b55;box-shadow:0 0 0 3px rgba(40,123,85,.12)}.category-filter-search input::placeholder{color:#788292}.category-filter-select{height:44px;flex:0 1 180px;min-width:155px;padding:0 36px 0 13px;border:1px solid #aeb5ad;border-radius:11px;background-color:#fff;color:#253142;font-size:14px}.category-filter-submit{height:44px;padding:0 18px;border:1px solid #c5cbc2;border-radius:11px;background:#fff;color:#152235;font-weight:600}.category-filter-submit:hover{background:#f5f7f4;border-color:#98a197}.category-filter-clear{padding:0 4px;color:#697386;font-size:13px;text-decoration:none}.category-filter-clear:hover{color:#182230;text-decoration:underline}.category-filter-spacer{flex:1}.category-filter-add{height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0 18px;border-radius:11px;white-space:nowrap}@media(max-width:900px){.category-filter-form{flex-wrap:wrap}.category-filter-search{flex:1 1 100%}.category-filter-spacer{display:none}.category-filter-add{margin-left:auto}}@media(max-width:560px){.category-filter-select{flex:1 1 45%;min-width:0}.category-filter-submit{flex:1}.category-filter-clear{order:5}.category-filter-add{order:6;width:100%}}
+{/literal}
+</style>
 
-<div class="admin-panel mb-3">
-	<p class="small text-muted mb-0">
-		{'Homepage category blocks: enable “Show on homepage” on categories you want on the store home page. If none are selected, all menu categories are shown.'|adminT}
-	</p>
+<div class="admin-panel mb-3"><p class="small text-muted mb-0">{'Homepage category blocks: enable “Show on homepage” on categories you want on the store home page. If none are selected, all menu categories are shown.'|adminT}<br><span class="text-muted">Sürükleyerek sıralayın ya da bir kategoriyi başka bir kategorinin altına bırakın. Klavyede tutamaca odaklanıp ok tuşlarını kullanabilirsiniz; değişiklik hemen kaydedilir.</span></p></div>
+<div class="admin-panel category-tree" id="categoryTree" data-url="{$categoryTreeUrl|escape}" data-token="{$adminToken|escape}" data-editable="{if $categoryTreeEditable}1{else}0{/if}">
+{if $categories|@count}{foreach $categories as $row}
+<div class="category-tree__row" data-id="{$row.id_category}" data-parent="{$row.id_parent|default:0}" data-depth="{$row.depth|default:0}" draggable="{if $categoryTreeEditable}true{else}false{/if}">
+ <div class="category-tree__main" style="--category-depth:{$row.depth|default:0}">
+  {if $categoryTreeEditable}<button type="button" class="category-tree__drag" aria-label="{$row.category_name|escape} kategorisini taşı" title="Sürükleyerek taşı">⠿</button>{/if}
+  {if $row.has_children}<span class="category-tree__chevron">⌄</span>{else}<span class="category-tree__chevron category-tree__chevron--empty"></span>{/if}
+  <span class="category-tree__name">{$row.category_name|escape}</span>
+  <div class="category-tree__meta"><span class="category-tree__status{if !$row.active} is-inactive{/if}">{if $row.active}{'Active'|adminT}{else}{'Inactive'|adminT}{/if}</span><span>{$row.product_count|default:0} ürün, {$row.child_count|default:0} altında</span>
+   <form method="post" class="d-inline"><input type="hidden" name="token" value="{$adminToken|escape}"><input type="hidden" name="idCategory" value="{$row.id_category}"><input type="hidden" name="active" value="{if $row.active}0{else}1{/if}"><button type="submit" name="toggleActiveCategory" value="1" class="category-tree__toggle{if $row.active} is-on{/if}" title="{if $row.active}Pasife al{else}Aktifleştir{/if}" aria-label="{if $row.active}Pasife al{else}Aktifleştir{/if}"><span></span></button></form>
+   <form method="post" class="d-inline"><input type="hidden" name="token" value="{$adminToken|escape}"><input type="hidden" name="idCategory" value="{$row.id_category}"><input type="hidden" name="show_on_home" value="{if $row.show_on_home|default:0}0{else}1{/if}"><button type="submit" name="toggleHomeCategory" value="1" class="category-tree__home{if $row.show_on_home|default:0} is-on{/if}" title="{'Show on homepage'|adminT}" aria-label="{'Show on homepage'|adminT}">★</button></form>
+   <a href="{$adminUrl}category?id={$row.id_category}" class="category-tree__action" title="{'Edit'|adminT}" aria-label="{'Edit'|adminT}">✎</a>
+   <details class="category-tree__menu"><summary class="category-tree__action" title="İşlemler" aria-label="İşlemler">⋯</summary>
+    <a class="category-tree__menu-item" href="{$adminUrl}category?parent={$row.id_category}">Alt kategori Ekle</a>
+    {if $row.id_category > 1}<form action="" method="post"><input type="hidden" name="token" value="{$adminToken|escape}"><input type="hidden" name="idCategory" value="{$row.id_category}"><button type="submit" name="deleteCategory" value="{$adminToken|escape}" class="category-tree__delete js-admin-confirm" data-confirm-title="{'Delete category'|adminT}" data-confirm-message="{'Are you sure you want to delete this category? The category record will be permanently removed.'|adminT}">Kategoriyi Sil</button></form>{/if}
+   </details>
+  </div>
+ </div>
 </div>
-
-<div class="admin-panel">
-	<div class="table-responsive">
-		<table class="table table-sm align-middle mb-0">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>{'Name'|adminT}</th>
-					<th>URL</th>
-					<th>{'Parent category'|adminT}</th>
-					<th>{'Homepage'|adminT}</th>
-					<th>{'Status'|adminT}</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				{if $categories|@count}
-				{foreach $categories as $row}
-				<tr>
-					<td>{$row.id_category}</td>
-					<td>{$row.category_name|escape}</td>
-					<td>{$row.category_link|escape}</td>
-					<td>{if $row.parent_name}{$row.parent_name|escape}{else}—{/if}</td>
-					<td>
-						<form method="post" class="d-inline">
-							<input type="hidden" name="token" value="{$adminToken}">
-							<input type="hidden" name="idCategory" value="{$row.id_category}">
-							{if $row.show_on_home|default:0}
-							<input type="hidden" name="show_on_home" value="0">
-							<button type="submit" name="toggleHomeCategory" value="1" class="btn btn-sm btn-success" title="{'Show on homepage'|adminT}">
-								{'On'|adminT}
-								{if $row.home_position|default:0 > 0}<span class="opacity-75">#{$row.home_position}</span>{/if}
-							</button>
-							{else}
-							<input type="hidden" name="show_on_home" value="1">
-							<button type="submit" name="toggleHomeCategory" value="1" class="btn btn-sm btn-outline-secondary" title="{'Show on homepage'|adminT}">
-								{'Off'|adminT}
-							</button>
-							{/if}
-						</form>
-					</td>
-					<td>{if $row.active}{'Active'|adminT}{else}<span class="text-danger">{'Inactive'|adminT}</span>{/if}</td>
-					<td class="text-end text-nowrap">
-						<form action="" method="POST" class="adm-row-actions">
-							<input type="hidden" name="token" value="{$adminToken}">
-							<a href="{$adminUrl}category?id={$row.id_category}" class="adm-icon-btn" title="{'Edit'|adminT}" aria-label="{'Edit'|adminT}">
-								<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
-							</a>
-							{if $row.id_category > 1}
-							<input type="hidden" name="idCategory" value="{$row.id_category}">
-							<button type="submit" name="deleteCategory" value="{$adminToken}" class="adm-icon-btn adm-icon-btn--danger js-admin-confirm" title="{'Delete'|adminT}" aria-label="{'Delete'|adminT}" data-confirm-title="{'Delete category'|adminT}" data-confirm-message="{'Are you sure you want to delete this category? The category record will be permanently removed.'|adminT}">
-								<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-							</button>
-							{/if}
-						</form>
-					</td>
-				</tr>
-				{/foreach}
-				{else}
-				<tr><td colspan="7" class="text-muted">{'No records found.'|adminT}</td></tr>
-				{/if}
-			</tbody>
-		</table>
-	</div>
-</div>
+{/foreach}{else}<p class="text-muted mb-0">{'No records found.'|adminT}</p>{/if}<div class="category-tree__notice" role="status" aria-live="polite"></div></div>
+<style>
+{literal}
+.category-tree{--tree-border:#d8ddd4;--tree-ink:#24364b}.category-tree__row{margin:0 0 6px;border:1px solid var(--tree-border);border-radius:12px;background:#fff;transition:box-shadow .15s,opacity .15s}.category-tree__row.is-dragging{opacity:.45}.category-tree__row.is-drop-before{box-shadow:0 -3px 0 #287b55}.category-tree__row.is-drop-after{box-shadow:0 3px 0 #287b55}.category-tree__row.is-drop-child{outline:2px solid #287b55}.category-tree__main{min-height:42px;display:flex;align-items:center;gap:10px;padding:5px 12px 5px calc(12px + var(--category-depth)*28px);color:var(--tree-ink)}.category-tree__drag{border:0;background:none;color:#626c76;font-size:19px;line-height:1;cursor:grab;padding:2px}.category-tree__drag:focus-visible{outline:2px solid #287b55;border-radius:4px}.category-tree__chevron{width:14px;text-align:center;font-size:19px;color:#596673}.category-tree__chevron--empty{width:14px}.category-tree__name{font-size:14px}.category-tree__meta{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:#526176;white-space:nowrap}.category-tree__status{border-radius:20px;background:#edf0ed;padding:3px 9px}.category-tree__status:before{content:'';display:inline-block;width:6px;height:6px;background:#87918a;border-radius:50%;margin-right:5px}.category-tree__status.is-inactive{color:#66716a}.category-tree__toggle{width:36px;height:20px;padding:2px;border:0;border-radius:20px;background:#929991}.category-tree__toggle span{display:block;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s}.category-tree__toggle.is-on{background:#287b55}.category-tree__toggle.is-on span{transform:translateX(16px)}.category-tree__home{border:0;background:none;color:#a0a69f;font-size:17px;padding:0 3px}.category-tree__home.is-on{color:#e5a500}.category-tree__action{display:inline-flex;align-items:center;justify-content:center;width:24px;height:28px;border:0;background:transparent;color:#596673;text-decoration:none;font-size:18px;cursor:pointer}.category-tree__menu{position:relative}.category-tree__menu summary{list-style:none}.category-tree__menu summary::-webkit-details-marker{display:none}.category-tree__menu form,.category-tree__menu-item{display:flex;align-items:center;box-sizing:border-box;width:160px;height:36px;z-index:20;padding:0 12px;background:#fff;border:1px solid #ddd;color:#344054;text-decoration:none;white-space:nowrap}.category-tree__menu form{position:absolute;right:0;top:calc(100% + 36px);padding:0;border-radius:0 0 6px 6px;box-shadow:0 4px 14px #0002}.category-tree__menu-item{position:absolute;right:0;top:100%;border-radius:6px 6px 0 0;box-shadow:0 4px 14px #0002}.category-tree__delete{display:flex;align-items:center;box-sizing:border-box;border:0;background:none;color:#b42318;padding:0 12px;text-align:left;width:100%;height:34px;white-space:nowrap}.category-tree__notice{font-size:12px;color:#287b55;min-height:0}.category-tree__notice.is-error{color:#b42318}@media(max-width:700px){.category-tree__main{padding-left:calc(8px + var(--category-depth)*16px);gap:6px}.category-tree__meta{gap:5px;font-size:11px}.category-tree__status{display:none}}
+{/literal}
+</style>
+{if $categoryTreeEditable}<script>
+{literal}
+(function(){var tree=document.getElementById('categoryTree');if(!tree)return;var dragged=null,armed=null,notice=tree.querySelector('.category-tree__notice');function rows(){return Array.prototype.slice.call(tree.querySelectorAll('.category-tree__row'))}function save(){var positions={};var items=rows().map(function(row){var p=row.dataset.parent||'0',pos=positions[p]||0;positions[p]=pos+1;return{id:parseInt(row.dataset.id,10),parent:parseInt(p,10),position:pos}});var body=new URLSearchParams({saveCategoryTree:'1',token:tree.dataset.token,tree:JSON.stringify(items)});fetch(tree.dataset.url,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8','X-Requested-With':'XMLHttpRequest'},body:body.toString()}).then(function(r){return r.json()}).then(function(data){notice.textContent=data.message||'';notice.classList.toggle('is-error',!data.success);if(data.success){location.reload();return}}).catch(function(){notice.textContent='Kaydetme başarısız oldu.';notice.classList.add('is-error')})}rows().forEach(function(row){row.addEventListener('dragstart',function(e){if(armed!==row){e.preventDefault();return}dragged=row;armed=null;row.classList.add('is-dragging');e.dataTransfer.effectAllowed='move'});row.addEventListener('dragend',function(){row.classList.remove('is-dragging');if(armed===row)armed=null;rows().forEach(function(r){r.classList.remove('is-drop-before','is-drop-after','is-drop-child')})});row.addEventListener('dragover',function(e){if(!dragged||dragged===row)return;e.preventDefault();var rect=row.getBoundingClientRect(),ratio=(e.clientY-rect.top)/rect.height;row.classList.toggle('is-drop-before',ratio<.27);row.classList.toggle('is-drop-after',ratio>.73);row.classList.toggle('is-drop-child',ratio>=.27&&ratio<=.73)});row.addEventListener('dragleave',function(){row.classList.remove('is-drop-before','is-drop-after','is-drop-child')});row.addEventListener('drop',function(e){e.preventDefault();if(!dragged||dragged===row)return;var rect=row.getBoundingClientRect(),ratio=(e.clientY-rect.top)/rect.height;if(ratio>=.27&&ratio<=.73){dragged.dataset.parent=row.dataset.id;row.after(dragged)}else{dragged.dataset.parent=row.dataset.parent||'0';if(ratio<.5)row.before(dragged);else row.after(dragged)}rows().forEach(function(r){r.classList.remove('is-drop-before','is-drop-after','is-drop-child')});save()})});tree.querySelectorAll('.category-tree__drag').forEach(function(handle){handle.addEventListener('pointerdown',function(){armed=handle.closest('.category-tree__row')});handle.addEventListener('keydown',function(e){if(e.key!=='ArrowUp'&&e.key!=='ArrowDown')return;e.preventDefault();var row=handle.closest('.category-tree__row'),all=rows(),index=all.indexOf(row),next=all[index+(e.key==='ArrowUp'?-1:1)];if(!next)return;if(e.key==='ArrowUp')next.before(row);else next.after(row);row.dataset.parent=next.dataset.parent||'0';save()})})})();
+{/literal}
+</script>{/if}

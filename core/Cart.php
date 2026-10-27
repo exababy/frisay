@@ -20,7 +20,7 @@ class Cart
 	 * @param array<string, string> $options
 	 * @param array<string, mixed>|null $measure
 	 */
-	public static function cartKey(int $idProduct, int $idVariation = 0, array $options = [], ?array $measure = null): string
+	public static function cartKey(int $idProduct, int $idVariation = 0, array $options = [], ?array $measure = null, array $personalizations = []): string
 	{
 		$base = $idVariation > 0 ? $idProduct . ':' . $idVariation : (string) $idProduct;
 		$options = ProductOption::normalizeSelections($options);
@@ -33,6 +33,9 @@ class Cart
 
 		if ($measurePart !== '') {
 			$parts[] = 'm' . $measurePart;
+		}
+		if ($personalizations !== []) {
+			$parts[] = 'p' . substr(md5((string) json_encode($personalizations, JSON_UNESCAPED_UNICODE)), 0, 12);
 		}
 
 		if ($parts === []) {
@@ -129,7 +132,8 @@ class Cart
 		float $qty = 1,
 		int $idVariation = 0,
 		array $options = [],
-		?array $measure = null
+		?array $measure = null,
+		array $personalizations = []
 	): array {
 		self::init();
 
@@ -187,7 +191,7 @@ class Cart
 			return self::fail(translate('Invalid quantity'));
 		}
 
-		$key = self::cartKey($idProduct, $idVariation, $options, $measureData);
+		$key = self::cartKey($idProduct, $idVariation, $options, $measureData, $personalizations);
 		$current = self::getLineQty($key);
 		$maxAllowed = round($stock - $current, 3);
 
@@ -200,6 +204,7 @@ class Cart
 		self::setLineMeta($key, [
 			'options' => $options,
 			'measure' => $measureData ?: [],
+			'personalizations' => $personalizations,
 		]);
 		self::notifyChanged();
 
@@ -329,6 +334,7 @@ class Cart
 		self::setLineMeta($key, [
 			'options' => is_array($meta['options'] ?? null) ? $meta['options'] : [],
 			'measure' => $measure,
+			'personalizations' => is_array($meta['personalizations'] ?? null) ? $meta['personalizations'] : [],
 		]);
 		self::notifyChanged();
 
@@ -370,6 +376,9 @@ class Cart
 			$idVariation = (int) $parsed['id_variation'];
 			$options = is_array($parsed['options'] ?? null) ? $parsed['options'] : [];
 			$measure = is_array($parsed['measure'] ?? null) ? $parsed['measure'] : [];
+			$lineMeta = self::getLineMeta((string) $cartKey);
+			$personalizations = is_array($lineMeta['personalizations'] ?? null) ? $lineMeta['personalizations'] : [];
+			$personalizationLabel = ProductPersonalization::formatLabel($personalizations);
 			$product = Product::getById($idProduct);
 
 			if (!$product) {
@@ -437,7 +446,6 @@ class Cart
 			if ($measureLabel !== '') {
 				$labels[] = $measureLabel;
 			}
-
 			if ($labels !== []) {
 				$productName .= ' (' . implode(' | ', $labels) . ')';
 			}
@@ -453,6 +461,8 @@ class Cart
 				'id_variation' => $idVariation,
 				'options' => $options,
 				'options_label' => $optionsLabel,
+				'personalizations' => $personalizations,
+				'personalization_label' => $personalizationLabel,
 				'measure' => $measure,
 				'measure_label' => $measureLabel,
 				'sale_unit' => $saleUnit,

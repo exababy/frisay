@@ -1,6 +1,6 @@
 # FShop
 
-**Version 2.1.0** — Open-source PHP e-commerce for merchants and developers who want a readable, self-hosted store without a heavy framework.
+**Version 3.0.2** — Open-source PHP e-commerce for merchants and developers who want a readable, self-hosted store without a heavy framework.
 
 FShop runs on plain PHP, MySQL, Apache, and Smarty. You own your data, extend the shop with modules, and customize the storefront with themes — no Node build step, no vendor lock-in.
 

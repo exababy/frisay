@@ -116,8 +116,8 @@
 		<div class="module-row-actions d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
 			{if $mod.installed}
 			<div class="btn-group">
-				<a href="{$mod.configure_url}" class="btn btn-outline-primary module-btn-configure">{'Configure'|adminT}</a>
-				<button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+				<a href="{$mod.configure_url}" class="btn btn-sm btn-outline-primary module-btn-configure">{'Configure'|adminT}</a>
+				<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
 					<span class="visually-hidden">{'More actions'|adminT}</span>
 				</button>
 				<ul class="dropdown-menu dropdown-menu-end">
@@ -150,6 +150,15 @@
 							<button type="submit" name="action" value="uninstall" class="dropdown-item text-danger px-0">{'Uninstall'|adminT}</button>
 						</form>
 					</li>
+					<li><hr class="dropdown-divider"></li>
+					<li>
+						<form method="post" class="px-3 py-1">
+							<input type="hidden" name="moduleAction" value="1">
+							<input type="hidden" name="token" value="{$adminToken}">
+							<input type="hidden" name="name" value="{$mod.name|escape}">
+							<button type="submit" name="action" value="delete" class="dropdown-item text-danger px-0 js-admin-confirm" data-confirm-title="Modülü kalıcı olarak sil" data-confirm-message="Bu modül önce kaldırılacak, ardından modül klasörü ve tüm dosyaları kalıcı olarak silinecek. Devam etmek istiyor musunuz?">Modülü sil</button>
+						</form>
+					</li>
 				</ul>
 			</div>
 			{else}
@@ -157,7 +166,13 @@
 				<input type="hidden" name="moduleAction" value="1">
 				<input type="hidden" name="token" value="{$adminToken}">
 				<input type="hidden" name="name" value="{$mod.name|escape}">
-				<button type="submit" name="action" value="install" class="btn btn-outline-primary module-btn-configure js-admin-busy">{'Install'|adminT}</button>
+				<button type="submit" name="action" value="install" class="btn btn-sm btn-outline-primary module-btn-configure js-admin-busy">{'Install'|adminT}</button>
+			</form>
+			<form method="post" class="d-inline" data-confirm-title="Modülü kalıcı olarak sil" data-confirm-message="Modül klasörü ve tüm dosyaları kalıcı olarak silinecek. Devam etmek istiyor musunuz?">
+				<input type="hidden" name="moduleAction" value="1">
+				<input type="hidden" name="token" value="{$adminToken}">
+				<input type="hidden" name="name" value="{$mod.name|escape}">
+				<button type="submit" name="action" value="delete" class="btn btn-sm btn-outline-danger js-admin-confirm" data-confirm-title="Modülü kalıcı olarak sil" data-confirm-message="Modül klasörü ve tüm dosyaları kalıcı olarak silinecek. Devam etmek istiyor musunuz?">Modülü sil</button>
 			</form>
 			{/if}
 		</div>
