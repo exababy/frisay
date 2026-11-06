@@ -57,3 +57,14 @@ config/debug.log
 
 # Yayın paketleri
 dist/
+
+# Cupcake teması — admin panelinden düzenlenen dosyalar (sunucuda otomatik oluşur, deploy'da ezilmesin)
+templates/cupcake/css/colors.css
+templates/cupcake/css/custom.css
+templates/cupcake/css/user.css
+
+# Modül yüklemeleri (kullanıcı içeriği)
+modules/story/assets/uploads/*
+!modules/story/assets/uploads/index.php
+modules/product-files/uploads/*
+!modules/product-files/uploads/index.php

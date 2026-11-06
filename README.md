@@ -6,6 +6,8 @@ FShop runs on plain PHP, MySQL, Apache, and Smarty. You own your data, extend th
 
 🔗 **Repository:** [github.com/bera65/frisay](https://github.com/bera65/frisay)
 
+> 🧁 **Bu dalda:** cupcake / butik pastane için **Cupcake Vitrin** teması (`templates/cupcake`) + yönetim modülü (`modules/cupcake-vitrin`) ve frisay.com'daki eksik modüller. Plesk kurulumu ve güncelleme notları: [docs/CUPCAKE_VITRIN.md](docs/CUPCAKE_VITRIN.md)
+
 ---
 
 ## Live demo

@@ -1,0 +1,254 @@
+/* Barkod & Etiket — admin tasarımcı */
+.bl-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 12px;
+}
+
+.bl-head__left {
+	min-width: 240px;
+	flex: 0 1 320px;
+}
+
+.bl-head__save {
+	display: flex;
+	align-items: flex-end;
+	gap: 8px;
+	flex: 1 1 360px;
+}
+
+.bl-head__save > div {
+	flex: 1 1 auto;
+}
+
+.bl-head__actions form {
+	margin: 0;
+}
+
+.bl-presets {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+}
+
+.bl-presets .btn {
+	padding: 2px 8px;
+	font-size: 12px;
+}
+
+/* Öğe listesi */
+.bl-elements {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.bl-elements li {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 8px;
+	border-radius: 6px;
+}
+
+.bl-elements li + li {
+	margin-top: 2px;
+}
+
+.bl-elements li.is-active {
+	background: #e8f1ff;
+}
+
+.bl-elements li.is-hidden .bl-elements__name {
+	color: #9aa0a6;
+}
+
+.bl-elements__name {
+	flex: 1 1 auto;
+	border: 0;
+	padding: 0;
+	background: none;
+	text-align: left;
+	font-size: 14px;
+	color: inherit;
+	cursor: pointer;
+}
+
+/* Sahne */
+.bl-stage-bar {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin-bottom: 10px;
+}
+
+.bl-stage {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 300px;
+	padding: 24px;
+	overflow: auto;
+	border-radius: 8px;
+	background: repeating-conic-gradient(#eef0f3 0% 25%, #f7f8fa 0% 50%) 0 0 / 20px 20px;
+	outline: none;
+}
+
+.bl-stage:focus-visible {
+	box-shadow: inset 0 0 0 2px #86b7fe;
+}
+
+.bl-canvas {
+	position: relative;
+	flex: 0 0 auto;
+	box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+	user-select: none;
+	touch-action: none;
+}
+
+.bl-canvas > .bl-label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform-origin: 0 0;
+}
+
+.bl-canvas.has-grid::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: 5;
+	pointer-events: none;
+	background-image:
+		linear-gradient(to right, rgba(0, 120, 255, 0.16) 1px, transparent 1px),
+		linear-gradient(to bottom, rgba(0, 120, 255, 0.16) 1px, transparent 1px),
+		linear-gradient(to right, rgba(0, 120, 255, 0.07) 1px, transparent 1px),
+		linear-gradient(to bottom, rgba(0, 120, 255, 0.07) 1px, transparent 1px);
+	background-size:
+		calc(var(--bl-mm) * 5) calc(var(--bl-mm) * 5),
+		calc(var(--bl-mm) * 5) calc(var(--bl-mm) * 5),
+		var(--bl-mm) var(--bl-mm),
+		var(--bl-mm) var(--bl-mm);
+}
+
+.bl-canvas .bl-el {
+	cursor: move;
+	outline: calc(1px * var(--bl-inv, 1)) dashed rgba(0, 0, 0, 0.18);
+}
+
+.bl-canvas .bl-el:hover {
+	outline-color: rgba(13, 110, 253, 0.6);
+}
+
+.bl-canvas .bl-el.is-selected {
+	z-index: 6;
+	outline: calc(1.5px * var(--bl-inv, 1)) solid #0d6efd;
+}
+
+.bl-canvas .bl-el.is-empty {
+	opacity: 0.35;
+}
+
+.bl-handle {
+	display: none;
+	position: absolute;
+	right: calc(-5px * var(--bl-inv, 1));
+	bottom: calc(-5px * var(--bl-inv, 1));
+	width: calc(10px * var(--bl-inv, 1));
+	height: calc(10px * var(--bl-inv, 1));
+	border: calc(1.5px * var(--bl-inv, 1)) solid #fff;
+	border-radius: 2px;
+	background: #0d6efd;
+	cursor: nwse-resize;
+}
+
+.bl-el--text .bl-handle {
+	top: 50%;
+	bottom: auto;
+	margin-top: calc(-5px * var(--bl-inv, 1));
+	cursor: ew-resize;
+}
+
+.bl-el.is-selected .bl-handle {
+	display: block;
+}
+
+.bl-prop-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	padding-top: 6px;
+}
+
+/* Ürün arama / liste */
+.bl-results {
+	max-height: 320px;
+	overflow-y: auto;
+	margin-top: 8px;
+}
+
+.bl-result,
+.bl-sel {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 0;
+	border-bottom: 1px solid #eef0f2;
+}
+
+.bl-result__info,
+.bl-sel__info {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-width: 0;
+	border: 0;
+	padding: 0;
+	background: none;
+	text-align: left;
+	font-size: 13px;
+	line-height: 1.3;
+	color: inherit;
+}
+
+.bl-result__info {
+	cursor: pointer;
+}
+
+.bl-result__info strong,
+.bl-sel__info strong {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-weight: 600;
+}
+
+.bl-result__info span,
+.bl-sel__info span {
+	color: #6c757d;
+}
+
+.bl-result__info small,
+.bl-sel__info small {
+	color: #8a9097;
+	font-size: 11px;
+}
+
+.bl-sel.is-preview {
+	margin: 0 -8px;
+	padding-left: 8px;
+	padding-right: 8px;
+	border-radius: 6px;
+	background: #e8f1ff;
+}
+
+.bl-qty {
+	width: 64px;
+	flex: 0 0 64px;
+}
+
+.bl-selected {
+	max-height: 380px;
+	overflow-y: auto;
+}

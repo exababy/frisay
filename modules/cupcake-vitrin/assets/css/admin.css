@@ -1,0 +1,18 @@
+.cv-admin__head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.cv-admin__brand{display:flex;gap:.85rem;align-items:center}
+.cv-admin__logo{font-size:2.2rem;line-height:1;display:grid;place-items:center;width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#ffd3de,#fff1d6);box-shadow:0 6px 18px rgba(226,85,123,.18)}
+.cv-admin__title{font-size:1.15rem;margin:0;font-weight:700}
+.cv-admin__title small{font-size:.75rem;color:#999;font-weight:500}
+.cv-admin__lead{margin:0;color:#777;font-size:.85rem}
+.cv-admin__tabs{margin-bottom:1rem}
+.cv-admin__table td,.cv-admin__table th{vertical-align:middle}
+.cv-swatch{display:inline-block;width:22px;height:22px;border-radius:50%;border:3px solid #ccc;flex:0 0 auto;vertical-align:middle}
+.cv-palette-legend{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;font-size:.8rem;color:#666;margin-top:.5rem}
+.cv-palette-legend__item{display:inline-flex;align-items:center;gap:.4rem}
+.cv-mod{display:flex;gap:.6rem;align-items:flex-start;padding:.65rem .75rem;border:1px solid #eee;border-radius:12px;cursor:pointer;height:100%;background:#fff;transition:border-color .2s,box-shadow .2s}
+.cv-mod:hover{border-color:#e2557b;box-shadow:0 4px 14px rgba(226,85,123,.08)}
+.cv-mod.is-installed{background:#fafafa;cursor:default}
+.cv-mod .form-check-input{margin-top:.2rem;flex:0 0 auto}
+.cv-mod__body{display:flex;flex-direction:column;font-size:.85rem;line-height:1.3}
+.cv-mod__meta{font-size:.75rem;color:#888}
+.cv-admin__log{max-height:260px;overflow:auto;font-family:ui-monospace,monospace}

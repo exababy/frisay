@@ -1,0 +1,342 @@
+/* ============================================================
+   STORY MODULE — FRONT CSS
+   ============================================================ */
+
+.bk-story-section {
+	background: var(--bk-white, #ffffff);
+	padding: 12px 0 12px;
+	margin-top: 0;
+	border-bottom: 1px solid var(--bk-gray-mid, #e0e0e0);
+}
+
+.bk-story-inner {
+	display: flex;
+	gap: 18px;
+	overflow-x: auto;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	padding: 0 16px;
+	max-width: var(--bk-container-max, 1320px);
+	margin: 0 auto;
+}
+
+.bk-story-inner::-webkit-scrollbar {
+	display: none;
+}
+
+.bk-story-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	flex: 0 0 auto;
+	user-select: none;
+}
+
+.bk-story-ring {
+	width: 78px;
+	height: 78px;
+	border-radius: 50%;
+	padding: 2.5px;
+	background: #e0e0e0;
+	transition: transform 0.2s ease, background 0.3s ease;
+	position: relative;
+}
+
+.bk-story-ring.has-story {
+	background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.bk-story-item:hover .bk-story-ring {
+	transform: scale(1.05);
+}
+
+.bk-story-avatar {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	overflow: hidden;
+	background: #ffffff;
+	border: 2px solid #ffffff;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.bk-story-avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.bk-story-avatar-placeholder {
+	width: 100%;
+	height: 100%;
+	background: #f5f5f5;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #999;
+}
+
+.bk-story-video-badge {
+	position: absolute;
+	bottom: 2px;
+	right: 2px;
+	background: rgba(0, 0, 0, 0.75);
+	color: #ffffff;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 8px;
+}
+
+.bk-story-name {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.3px;
+	text-align: center;
+	color: var(--bk-text, #222222);
+	max-width: 85px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* ============================================================
+   STORY MODAL POPUP VIEWER
+   ============================================================ */
+.bk-story-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.92);
+	backdrop-filter: blur(10px);
+	z-index: 99999;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	transition: opacity 0.25s ease;
+}
+
+.bk-story-modal-overlay.active {
+	display: flex;
+	opacity: 1;
+}
+
+.bk-story-modal-container {
+	position: relative;
+	width: 100%;
+	max-width: 420px;
+	height: 90vh;
+	max-height: 780px;
+	background: #000000;
+	border-radius: 16px;
+	overflow: hidden;
+	box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+	display: flex;
+	flex-direction: column;
+}
+
+.bk-story-modal-top {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	padding: 12px 16px 20px;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent);
+}
+
+.bk-story-progress-bar {
+	width: 100%;
+	height: 3px;
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 2px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.bk-story-progress-fill {
+	width: 0%;
+	height: 100%;
+	background: #ffffff;
+	transition: width 0.1s linear;
+}
+
+.bk-story-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.bk-story-author {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.bk-story-author-img {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 1.5px solid #ffffff;
+}
+
+.bk-story-author-title {
+	color: #ffffff;
+	font-size: 13px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.bk-story-modal-close {
+	background: none;
+	border: none;
+	color: #ffffff;
+	cursor: pointer;
+	padding: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.85;
+	transition: opacity 0.2s;
+}
+
+.bk-story-modal-close:hover {
+	opacity: 1;
+}
+
+.bk-story-modal-body {
+	flex: 1;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	background: #000;
+}
+
+.bk-story-media-img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.bk-story-media-video {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.bk-story-touch-zone {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 35%;
+	z-index: 5;
+	cursor: pointer;
+}
+
+.bk-story-touch-left {
+	left: 0;
+}
+
+.bk-story-touch-right {
+	right: 0;
+}
+
+.bk-story-modal-footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	padding: 24px 20px 20px;
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+	display: flex;
+	justify-content: center;
+}
+
+.bk-story-cta-btn {
+	background: #ffffff;
+	color: #000000;
+	font-size: 13px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	padding: 12px 28px;
+	border-radius: 24px;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	text-decoration: none;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+	transition: transform 0.2s, background 0.2s;
+}
+
+.bk-story-cta-btn:hover {
+	transform: translateY(-2px);
+	background: #f0f0f0;
+	color: #000000;
+}
+
+/* Nav arrows for desktop */
+.bk-story-nav-btn {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: #ffffff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	z-index: 12;
+	transition: background 0.2s;
+}
+
+.bk-story-nav-btn:hover {
+	background: rgba(255, 255, 255, 0.4);
+}
+
+.bk-story-nav-prev {
+	left: -60px;
+}
+
+.bk-story-nav-next {
+	right: -60px;
+}
+
+@media (max-width: 575.98px) {
+	.bk-story-modal-container {
+		max-width: 100vw;
+		height: 100vh;
+		max-height: 100vh;
+		border-radius: 0;
+	}
+	.bk-story-nav-btn {
+		display: none;
+	}
+	.bk-story-ring {
+		width: 66px;
+		height: 66px;
+	}
+}

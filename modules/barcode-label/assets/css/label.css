@@ -1,0 +1,76 @@
+/* Barkod & Etiket — etiket görünümü (tasarımcı + yazdırma ortak) */
+.bl-label {
+	position: relative;
+	overflow: hidden;
+	box-sizing: border-box;
+	background: #fff;
+	color: #000;
+	-webkit-print-color-adjust: exact;
+	print-color-adjust: exact;
+}
+
+.bl-label.has-border {
+	outline: 0.2mm solid #000;
+	outline-offset: -0.2mm;
+}
+
+.bl-label *,
+.bl-label *::before,
+.bl-label *::after {
+	box-sizing: border-box;
+}
+
+.bl-el {
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	color: #000;
+	white-space: normal;
+	word-break: break-word;
+}
+
+.bl-el__txt {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.bl-el--text.is-invert .bl-el__txt {
+	padding: 0.25mm 0.6mm;
+	border-radius: 0.6mm;
+	background: #000;
+	color: #fff;
+}
+
+.bl-el--barcode {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.bl-bars {
+	flex: 1 1 auto;
+	min-height: 0;
+	display: flex;
+}
+
+.bl-bars svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.bl-bars__err {
+	margin: auto;
+	font-size: 6pt;
+	color: #b00;
+}
+
+.bl-bars__text {
+	flex: 0 0 auto;
+	padding-top: 0.3mm;
+	text-align: center;
+	letter-spacing: 0.08em;
+	line-height: 1;
+	white-space: nowrap;
+}
