@@ -1,4 +1,8 @@
 {assign var=cv value=$antepli|default:[]}
+{* Hiçbir kategori "Ana sayfada göster" ile işaretli değilse ürünlü tüm kategoriler vitrin olur *}
+{if isset($antepli) && (!isset($categoryBlocks) || !$categoryBlocks|@count)}
+	{assign var=categoryBlocks value=AntepliVitrinService::fallbackHomeBlocks()}
+{/if}
 {* Hero görselleri: admin'den girilenler, yoksa her vitrinin ilk ürün fotoğrafı *}
 {assign var=_heroImgs value=$cv.hero_images|default:[]}
 {if $_heroImgs|@count < 3 && isset($categoryBlocks)}

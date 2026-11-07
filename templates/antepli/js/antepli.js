@@ -398,4 +398,17 @@
 			return originalShowCartAdded.apply(this, arguments);
 		};
 	}
+
+	/* ------------------------------------------------------------------
+	 * Story (Hikaye) modülü: görüntüleyiciyi gövdeye taşı (animasyonlu
+	 * kapsayıcıların içinde sabit konum bozulmasın) ve tema kaplamasını ekle
+	 * ------------------------------------------------------------------ */
+	(function () {
+		var overlay = doc.getElementById('bkStoryModalOverlay');
+		if (!overlay) return;
+		overlay.classList.add('cv-story-skin');
+		if (overlay.parentNode !== doc.body) doc.body.appendChild(overlay);
+		var cta = doc.querySelector('#bkStoryModalCtaBtn span');
+		if (cta && /Detaya Git/i.test(cta.textContent)) cta.textContent = 'İncele';
+	})();
 })();

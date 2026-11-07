@@ -456,6 +456,50 @@ class AntepliVitrinService
 		self::$autoPalettes = null;
 	}
 
+	/**
+	 * Ana sayfada "Ana sayfada göster" işaretli dolu kategori yoksa (ör. ürünler XML ile
+	 * yeni kategorilere aktarıldığında) menüdeki ürünlü kategorilerden vitrin blokları üretir.
+	 *
+	 * @return list<array<string, mixed>>
+	 */
+	public static function fallbackHomeBlocks(int $limit = 10): array
+	{
+		if (!class_exists('Category') || !class_exists('Product')) {
+			return [];
+		}
+
+		$blocks = [];
+
+		try {
+			foreach (Category::getMenuList() as $cat) {
+				$id = (int) ($cat['id_category'] ?? 0);
+
+				if ($id <= 0 || empty($cat['active'])) {
+					continue;
+				}
+
+				$products = Product::getActiveList($id, $limit);
+
+				if (!$products) {
+					continue;
+				}
+
+				$cat['image_url'] = $cat['image_url'] ?? Category::getImageUrl($id);
+				$blocks[] = [
+					'category' => $cat,
+					'products' => $products,
+					'url' => Category::getUrl($cat),
+				];
+			}
+		} catch (Throwable $e) {
+			error_log('antepli-vitrin fallback: ' . $e->getMessage());
+
+			return [];
+		}
+
+		return $blocks;
+	}
+
 	/** @return list<array<string, mixed>> */
 	public static function getAdminCategories(): array
 	{
