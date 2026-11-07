@@ -25,7 +25,7 @@ class AntepliVitrinBulkInstaller
 	];
 
 	/** Bu modüller toplu kurulumda hiç seçili gelmez (tema ile çakışır / gereksiz). */
-	private const SKIP = ['antepli-vitrin', 'theme4'];
+	private const SKIP = ['antepli-vitrin', 'cupcake-vitrin', 'theme4'];
 
 	/** Ödeme modülü olsa da kimlik bilgisi istemeyenler — etkin kurulabilir. */
 	private const SAFE_PAYMENTS = ['bankwire'];
