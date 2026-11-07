@@ -594,7 +594,11 @@ body.cv-body {
 .cv-shelf__more { flex: 0 0 36%; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; font-family: var(--cv-display); font-size: 1.25rem; font-weight: 600; line-height: 1.15; color: var(--v-ink) !important; text-decoration: none !important; }
 .cv-shelf__more-ring { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; border: 1px solid currentColor; transition: background .5s var(--cv-ease), color .5s; }
 .cv-shelf__more:hover .cv-shelf__more-ring { background: var(--v-ink); color: var(--v-bg); }
-@media (min-width: 992px) { .cv-shelf__more { flex-basis: 170px; } }
+@media (min-width: 992px) {
+	/* Ürün azsa "tümünü gör" alanı kalan boşluğu doldurur (sağda boş vitrin kalmaz) */
+	.cv-shelf__more { flex: 1 0 170px; min-height: 0; align-self: stretch; margin-bottom: 30px; border-left: 1px solid color-mix(in srgb, var(--v-ink) 16%, transparent); }
+	.cv-shelf__more-ring { width: 76px; height: 76px; }
+}
 .cv-shelf__nav { position: absolute; top: 42%; z-index: 6; display: none; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--cv-line); background: rgba(255, 255, 255, .92); color: var(--cv-ink-c); cursor: pointer; transition: opacity .4s, background .4s; }
 .cv-shelf__nav:hover { background: var(--cv-paper); }
 .cv-shelf__nav[disabled] { opacity: 0; pointer-events: none; }
@@ -740,6 +744,11 @@ body.cv-body {
 	.cv-toolbar .catalog-toolbar { flex-direction: column; align-items: stretch !important; }
 	.cv-toolbar .catalog-sort-form { width: 100%; gap: 14px !important; }
 	.cv-toolbar .catalog-sort-form .form-select { flex: 1 1 0; min-width: 0; }
+	/* Filtre butonu sayaç satırına; sıralama seçimleri tam genişlik (metin kesilmesin) */
+	.cv-toolbar { position: relative; }
+	.cv-toolbar__main { flex: 1 1 100%; }
+	.cv-toolbar .catalog-toolbar p { min-height: 40px; display: flex; align-items: center; margin: 0; }
+	.cv-toolbar > .cv-btn { position: absolute; top: 0; right: 0; }
 }
 .cv-toolbar__clear { margin: -12px 0 20px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
 .cv-toolbar__clear a { color: var(--cv-gold); text-decoration: none; }
@@ -843,6 +852,8 @@ body.cv-body {
 .cv-product .t4-product__gallery-main img, .cv-product .t4-product__image { width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; object-fit: cover !important; transition: transform 1.4s var(--cv-ease); }
 .cv-product .t4-product__gallery-main:hover img { transform: scale(1.04); }
 .cv-product .t4-product__expand, .cv-product .t4-product__alert-fab { border-radius: 50%; background: rgba(255, 255, 255, .9); color: var(--cv-ink-c); box-shadow: none; }
+/* Kemer üst köşeyi kırptığı için fiyat alarmı butonu sağ alta (büyütme butonunun karşısına) */
+.cv-product .t4-product__alert-fab { top: auto; bottom: 14px; right: 14px; width: 36px; height: 36px; }
 .cv-product .product-gallery__thumbs { gap: 10px; margin-top: 14px; }
 .cv-product .product-gallery__thumb { border-radius: 0 !important; border: 1px solid var(--cv-line) !important; background: var(--cv-sand); opacity: .7; transition: opacity .3s, border-color .3s; }
 .cv-product .product-gallery__thumb.active, .cv-product .product-gallery__thumb:hover { opacity: 1; border-color: var(--cv-ink-c) !important; }
@@ -851,7 +862,7 @@ body.cv-body {
 @media (min-width: 992px) { .cv-product .t4-product__buybox { padding-left: 24px !important; } }
 .cv-product .t4-product__buybox h1 { margin-bottom: 10px; font-family: var(--cv-display); font-weight: 500; font-size: clamp(2.1rem, 6vw, 3.1rem); line-height: 1.02; }
 .cv-product .t4-product__prices { margin-top: 10px; padding-top: 18px; border-top: 1px solid var(--cv-line); }
-.cv-product .current-price { font-family: var(--cv-font); font-size: 1.9rem !important; font-weight: 600; color: var(--cv-ink-c) !important; letter-spacing: .01em; }
+.cv-product .t4-product__prices .current-price { font-family: var(--cv-font); font-size: 1.9rem !important; font-weight: 600; color: var(--cv-ink-c) !important; letter-spacing: .01em; }
 .cv-product .old-price { color: var(--cv-ink-soft) !important; }
 .cv-product .t4-product__specs-label { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--cv-ink-soft); }
 .cv-product .t4-product__specs-value { color: var(--cv-ink-c); }
@@ -914,7 +925,14 @@ body.cv-body {
 .cv-page--404 .kutu h1 { color: var(--cv-ink-c) !important; font-family: var(--cv-display); font-weight: 500; }
 .cv-body .t4-product-card { border-radius: 0; border: 1px solid var(--cv-line); box-shadow: none; overflow: hidden; transition: border-color .4s; }
 .cv-body .t4-product-card:hover { border-color: var(--cv-line-strong); }
+/* Kart görseli kareyi tam doldursun (yatay fotoğraflarda beyaz boşluk kalmasın) */
+.cv-body .t4-product-card__image { aspect-ratio: 1 / 1; height: auto !important; padding: 0 !important; margin: 0 !important; overflow: hidden; background: var(--cv-sand); }
+.cv-body .t4-product-card__image img { width: 100% !important; height: 100% !important; max-height: none !important; object-fit: cover; transition: transform .8s var(--cv-ease); }
+.cv-body .t4-product-card:hover .t4-product-card__image img { transform: scale(1.04); }
+.cv-body .t4-product-card__prices .current-price { font-family: var(--cv-font); font-size: 1.05rem; font-weight: 700; color: var(--cv-ink-c); }
+.cv-body .t4-product-card__prices .old-price { font-size: .85rem; }
 .cv-body .t4-product-card__title { font-family: var(--cv-display); font-weight: 600; font-size: 1.15rem; }
+@media (max-width: 575.98px) { .cv-body .t4-product-card__title { font-size: 1rem; } }
 .cv-body .t4-product-card__cart { border-radius: 0 !important; background: var(--cv-primary-c) !important; color: var(--cv-accent-c) !important; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
 /* Sepet paneli ve sepet / ödeme özetleri — sade köşeler, sıcak tonlar */
 .cv-body .sm-cart-modal .sm-cart-dialog, .cv-body .sm-cart-dialog { border-radius: 2px !important; background: var(--cv-bg-c) !important; border-color: var(--cv-line) !important; }
