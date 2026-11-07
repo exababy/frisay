@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Antepli Ustalar ürün listesi — FriSay Admin › Modüller › XML Ürün Aktarım ile içe aktarın (eşleştirme: Stok kodu). Fiyatlar örnektir. -->
+<products>
+	<product>
+		<productCode>AU-0D335D</productCode>
+		<barcode></barcode>
+		<name>Fıstıklı Kerebiç (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Kerebiç</category>
+		<description>Bol Antep fıstığı dolgulu, oluklu kabuk kerebiç.</description>
+		<detail><![CDATA[<p>Bol Antep fıstığı dolgulu, oluklu kabuk kerebiç.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>650.00</price>
+		<listPrice>650.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Çok Satan (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/kerebic.jpg</image1>
+		<image2>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/kerebic-ic.jpg</image2>
+	</product>
+	<product>
+		<productCode>AU-A0FA7F</productCode>
+		<barcode></barcode>
+		<name>Fıstıklı Kerebiç (500 g)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Kerebiç</category>
+		<description>Yarım kiloluk paket; çay saatinin yıldızı.</description>
+		<detail><![CDATA[<p>Yarım kiloluk paket; çay saatinin yıldızı.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>340.00</price>
+		<listPrice>340.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/kerebic-ic.jpg</image1>
+		<image2>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/kerebic.jpg</image2>
+	</product>
+	<product>
+		<productCode>AU-D29B97</productCode>
+		<barcode></barcode>
+		<name>Cevizli Kerebiç (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Kerebiç</category>
+		<description>Ceviz içli klasik Antep kerebiçi.</description>
+		<detail><![CDATA[<p>Ceviz içli klasik Antep kerebiçi.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>560.00</price>
+		<listPrice>560.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Yeni (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/kerebic-tepsi.jpg</image1>
+		<image2>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/kerebic-ic.jpg</image2>
+	</product>
+	<product>
+		<productCode>AU-0ABEAF</productCode>
+		<barcode></barcode>
+		<name>Köylü Kahkesi (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Yöresel Kahkeler</category>
+		<description>Mahlepli, susamlı ve çörek otlu halka kahke.</description>
+		<detail><![CDATA[<p>Mahlepli, susamlı ve çörek otlu halka kahke.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>300.00</price>
+		<listPrice>300.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Çok Satan (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/koylu-kahke.jpg</image1>
+		<image2>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/hero-2.jpg</image2>
+	</product>
+	<product>
+		<productCode>AU-77652E</productCode>
+		<barcode></barcode>
+		<name>Çubuk Kahke (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Yöresel Kahkeler</category>
+		<description>Anteplilerin vazgeçilmezi, çıtır çubuk kahke.</description>
+		<detail><![CDATA[<p>Anteplilerin vazgeçilmezi, çıtır çubuk kahke.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>300.00</price>
+		<listPrice>300.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/cubuk-kahke.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-D39603</productCode>
+		<barcode></barcode>
+		<name>Susamlı Çubuk (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Yöresel Kahkeler</category>
+		<description>Bol susamlı, çaya birebir.</description>
+		<detail><![CDATA[<p>Bol susamlı, çaya birebir.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>280.00</price>
+		<listPrice>280.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/susamli-cubuk.jpg</image1>
+		<image2>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/hero-3.jpg</image2>
+	</product>
+	<product>
+		<productCode>AU-733BEC</productCode>
+		<barcode></barcode>
+		<name>Susamsız Çubuk (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Yöresel Kahkeler</category>
+		<description>Sade, tereyağlı çubuk.</description>
+		<detail><![CDATA[<p>Sade, tereyağlı çubuk.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>270.00</price>
+		<listPrice>270.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/cubuk-sari.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-15B2E3</productCode>
+		<barcode></barcode>
+		<name>Kakaolu Halka (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Yöresel Kahkeler</category>
+		<description>Kakaolu, yumuşak dokulu halka.</description>
+		<detail><![CDATA[<p>Kakaolu, yumuşak dokulu halka.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>300.00</price>
+		<listPrice>330.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Fırsat (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/halka.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-DAB914</productCode>
+		<barcode></barcode>
+		<name>Karışık Şekerli Kuru Pasta (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Şekerli Kuru Pasta</category>
+		<description>Çikolatalı, fıstıklı, hindistan cevizli karışık tabak.</description>
+		<detail><![CDATA[<p>Çikolatalı, fıstıklı, hindistan cevizli karışık tabak.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>350.00</price>
+		<listPrice>350.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Çok Satan (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/cikolatali.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-52EF7A</productCode>
+		<barcode></barcode>
+		<name>Susamlı Kurabiye (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Şekerli Kuru Pasta</category>
+		<description>Bol susamlı, çıtır kenarlı kurabiye.</description>
+		<detail><![CDATA[<p>Bol susamlı, çıtır kenarlı kurabiye.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>320.00</price>
+		<listPrice>320.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/susamli-kurabiye.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-2BA3A6</productCode>
+		<barcode></barcode>
+		<name>Çikolatalı Kurabiye (500 g)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Şekerli Kuru Pasta</category>
+		<description>Bitter çikolata parçacıklı.</description>
+		<detail><![CDATA[<p>Bitter çikolata parçacıklı.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>190.00</price>
+		<listPrice>190.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Yeni (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/cikolatali.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-0A3972</productCode>
+		<barcode></barcode>
+		<name>Karışık Tuzlu Kuru Pasta (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Tuzlu Kuru Pasta</category>
+		<description>Peynirli, zeytinli, çörek otlu karışık tuzlular.</description>
+		<detail><![CDATA[<p>Peynirli, zeytinli, çörek otlu karışık tuzlular.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>300.00</price>
+		<listPrice>300.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Çok Satan (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/tuzlu.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-702B6D</productCode>
+		<barcode></barcode>
+		<name>Peynirli Burma (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Tuzlu Kuru Pasta</category>
+		<description>Tereyağlı hamur, bol peynir.</description>
+		<detail><![CDATA[<p>Tereyağlı hamur, bol peynir.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>320.00</price>
+		<listPrice>320.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/tuzlu.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-C26351</productCode>
+		<barcode></barcode>
+		<name>Tahinli Çörek (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Tahinli &amp; Çörekler</category>
+		<description>Bol tahinli, karamelize kenarlı.</description>
+		<detail><![CDATA[<p>Bol tahinli, karamelize kenarlı.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>340.00</price>
+		<listPrice>340.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/tahinli.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-655D92</productCode>
+		<barcode></barcode>
+		<name>Tarsus Çöreği (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Tahinli &amp; Çörekler</category>
+		<description>Çıtır, susamlı yöresel çörek.</description>
+		<detail><![CDATA[<p>Çıtır, susamlı yöresel çörek.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>360.00</price>
+		<listPrice>360.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Yeni (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/tahinli.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-081A35</productCode>
+		<barcode></barcode>
+		<name>Kömbe (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Tahinli &amp; Çörekler</category>
+		<description>Mahlepli, tarçınlı geleneksel kömbe.</description>
+		<detail><![CDATA[<p>Mahlepli, tarçınlı geleneksel kömbe.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>320.00</price>
+		<listPrice>320.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+	</product>
+	<product>
+		<productCode>AU-3556CE</productCode>
+		<barcode></barcode>
+		<name>Klasik İzmir Bombası</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; İzmir Bombası</category>
+		<description>İçi akışkan çikolata dolgulu.</description>
+		<detail><![CDATA[<p>İçi akışkan çikolata dolgulu.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>45.00</price>
+		<listPrice>45.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/bomba-klasik.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-BCC0D8</productCode>
+		<barcode></barcode>
+		<name>Antep Fıstıklı İzmir Bombası</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; İzmir Bombası</category>
+		<description>Fıstık hamuru, çikolata dolgu.</description>
+		<detail><![CDATA[<p>Fıstık hamuru, çikolata dolgu.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>55.00</price>
+		<listPrice>55.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Çok Satan (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/bomba-fistik.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-54B747</productCode>
+		<barcode></barcode>
+		<name>Vişneli İzmir Bombası</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; İzmir Bombası</category>
+		<description>Vişne ve çikolata bir arada.</description>
+		<detail><![CDATA[<p>Vişne ve çikolata bir arada.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>50.00</price>
+		<listPrice>50.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/bomba-visne.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-464DBC</productCode>
+		<barcode></barcode>
+		<name>Frambuazlı İzmir Bombası</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; İzmir Bombası</category>
+		<description>Frambuazlı hamur, beyaz çikolata.</description>
+		<detail><![CDATA[<p>Frambuazlı hamur, beyaz çikolata.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>50.00</price>
+		<listPrice>50.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Yeni (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/bomba-frambuaz.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-DAF3BA</productCode>
+		<barcode></barcode>
+		<name>Çikolatalı İzmir Bombası</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; İzmir Bombası</category>
+		<description>İçi de dışı da çikolatalı.</description>
+		<detail><![CDATA[<p>İçi de dışı da çikolatalı.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>50.00</price>
+		<listPrice>50.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+	</product>
+	<product>
+		<productCode>AU-EEFC86</productCode>
+		<barcode></barcode>
+		<name>Meyveli Tartolet Kutusu (12'li)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Spesiyal &amp; Tartolet</category>
+		<description>Çilekli, karamelli, fıstıklı karışık tartolet.</description>
+		<detail><![CDATA[<p>Çilekli, karamelli, fıstıklı karışık tartolet.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>480.00</price>
+		<listPrice>480.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Çok Satan (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/tartolet.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-6DF9BE</productCode>
+		<barcode></barcode>
+		<name>Spesiyal Karışık (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Spesiyal &amp; Tartolet</category>
+		<description>Ustalarımızın seçtiği spesiyal çeşitler.</description>
+		<detail><![CDATA[<p>Ustalarımızın seçtiği spesiyal çeşitler.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>520.00</price>
+		<listPrice>520.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/tartolet.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-08702F</productCode>
+		<barcode></barcode>
+		<name>Şekerli Bayram Paketi (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Bayram Paketleri</category>
+		<description>Karışık şekerli kuru pastalar, hediyelik kutuda.</description>
+		<detail><![CDATA[<p>Karışık şekerli kuru pastalar, hediyelik kutuda.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>350.00</price>
+		<listPrice>400.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<!-- Etiket: Fırsat (XML modülü etiket alanını aktarmaz; ürün düzenlemeden ekleyebilirsiniz) -->
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/paket.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-0176DA</productCode>
+		<barcode></barcode>
+		<name>Tuzlu Bayram Paketi (1 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Bayram Paketleri</category>
+		<description>Karışık tuzlu kuru pastalar, hediyelik kutuda.</description>
+		<detail><![CDATA[<p>Karışık tuzlu kuru pastalar, hediyelik kutuda.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>300.00</price>
+		<listPrice>300.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/paket.jpg</image1>
+	</product>
+	<product>
+		<productCode>AU-3AEEE8</productCode>
+		<barcode></barcode>
+		<name>Karma Bayram Paketi (2 kg)</name>
+		<brand>Antepli Ustalar</brand>
+		<category>Katalog &gt;&gt;&gt; Bayram Paketleri</category>
+		<description>1 kg şekerli + 1 kg tuzlu kuru pasta.</description>
+		<detail><![CDATA[<p>1 kg şekerli + 1 kg tuzlu kuru pasta.</p><p>Antepli ustalarımızın elinden, her gün sıcak fırından. Hava almayan kapta, oda sıcaklığında saklayınız.</p>]]></detail>
+		<price>640.00</price>
+		<listPrice>700.00</listPrice>
+		<tax>0.01</tax>
+		<quantity>50</quantity>
+		<desi>1</desi>
+		<active>1</active>
+		<image1>https://antepliustalar.princex.net/modules/antepli-vitrin/assets/demo/paket.jpg</image1>
+	</product>
+</products>

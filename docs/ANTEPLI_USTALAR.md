@@ -87,6 +87,17 @@ Sade, kurumsal bir pastane estetiği: Cormorant Garamond serif başlıklar, Manr
 3. Renkleri değiştirmek için: Admin → **Temalar → Antepli Ustalar → Özelleştir** (kahverengi, bej, krem, bakır vurgu, fıstık yeşili).
 4. Logo: tema Antepli Ustalar logosuyla gelir; Admin → Ayarlar → Logo'dan yüklerseniz o kullanılır.
 
+### 2.4.1 Ürünleri XML ile aktarma (görseller dahil)
+
+`modules/antepli-vitrin/assets/demo/antepli-urunler.xml`: 8 kategori, 26 ürün, ürün başına 1–2 görsel (videolardan alınmış kareler). Fiyatlar örnektir.
+
+1. Admin → Modüller → **XML Ürün Aktarım** (kurulu değilse Antepli Vitrin → Modüller sekmesinden kurup etkinleştirin)
+2. Dosyayı yükleyin **veya** feed adresi olarak girin: `https://alanadiniz.com/modules/antepli-vitrin/assets/demo/antepli-urunler.xml`
+3. Eşleştirme: **Stok kodu**. Stok kodları demo ürünleriyle aynıdır; demo yüklüyse ürünler kopyalanmaz, güncellenir.
+4. Kategoriler `Katalog >>> …` yolu ile ana kategorinin altına açılır. Yeni açılan kategorileri ana sayfada vitrin olarak göstermek için Antepli Vitrin → Kategori vitrinleri → "Ana sayfada" anahtarını açın.
+
+Notlar: KDV `0.01` (= %1) olarak girildi (modül 0–1 arası değeri oran sayar), muhasebecinizle teyit edin. Görseller sitenizden HTTPS ile indirilir; geçerli bir SSL sertifikası gerekir. Ürün etiketleri ("Çok Satan", "Yeni") XML modülüyle aktarılmaz, ürün düzenleme ekranından eklenir.
+
 ### 2.5 Cron görevleri (Plesk → Scheduled Tasks)
 
 Kurulum ekranında gösterilen `SHOP_TOKEN` ile:
