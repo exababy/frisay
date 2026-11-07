@@ -1,0 +1,53 @@
+{
+	"label": "Antepli Ustalar",
+	"description": "Antepli Ustalar için mobil öncelikli vitrin teması — her kategori (kerebiç, kahke, kuru pasta, İzmir bombası…) ayrı bir cam vitrin; tente, alüminyum tepsiler, spot ışıkları ve bol animasyon. Sepet, ödeme ve hesap sayfaları theme4 altyapısını kullanır (güncellemelerle uyumlu).",
+	"preview": "theme-preview.png",
+	"edit": "",
+	"color_groups": {
+		"marka": "Marka & Renkler"
+	},
+	"colors": {
+		"cv-primary": {
+			"label": "Ana renk (kahverengi)",
+			"default": "#3B1F0F",
+			"group": "marka"
+		},
+		"cv-primary-dark": {
+			"label": "Ana renk koyu",
+			"default": "#22110A",
+			"group": "marka"
+		},
+		"cv-ink": {
+			"label": "Metin",
+			"default": "#3B1F0F",
+			"group": "marka"
+		},
+		"cv-bg": {
+			"label": "Sayfa arka planı (krem)",
+			"default": "#FBF4E8",
+			"group": "marka"
+		},
+		"cv-accent": {
+			"label": "Vurgu (bej)",
+			"default": "#F5D7A1",
+			"group": "marka"
+		},
+		"cv-highlight": {
+			"label": "Başlık vurgu (bakır)",
+			"default": "#B9772F",
+			"group": "marka"
+		},
+		"cv-pistachio": {
+			"label": "Fıstık yeşili",
+			"default": "#7A9A3C",
+			"group": "marka"
+		}
+	},
+	"color_aliases": {
+		"primary": "cv-primary",
+		"primary-hover": "cv-primary-dark",
+		"background": "cv-bg",
+		"text": "cv-ink"
+	},
+	"color_extra_css": ":root {\n\t--primary-light: #F5D7A1;\n\t--secondary: #F5D7A1;\n\t--text-muted: #85644F;\n\t--border: #EADCC4;\n\t--surface: #FFFFFF;\n\t--white: #FFFFFF;\n\t--danger: #B3263C;\n\t--radius: 18px;\n\t--radius-lg: 24px;\n\t--radius-pill: 999px;\n\t--shadow: 0 10px 30px rgba(59, 31, 15, 0.08);\n\t--shadow-nav: 0 -6px 24px rgba(59, 31, 15, 0.10);\n\t--container: 1240px;\n\t--transition: 260ms cubic-bezier(.22,1,.36,1);\n\t--font: 'Nunito', system-ui, -apple-system, sans-serif;\n\t--sn-blue: var(--primary);\n\t--sn-blue-dark: var(--primary-hover);\n\t--sm-primary: var(--primary);\n\t--sm-primary-dark: var(--primary-hover);\n\t--sm-primary-soft: var(--primary-light);\n\t--sm-accent: var(--primary);\n\t--sm-accent-dark: var(--primary-hover);\n\t--sm-bg: var(--background);\n\t--sm-surface: var(--surface);\n\t--sm-text: var(--text);\n\t--sm-muted: var(--text-muted);\n\t--sm-border: var(--border);\n\t--sm-radius: var(--radius);\n\t--sm-radius-lg: var(--radius-lg);\n\t--sm-shadow: var(--shadow);\n\t--sm-shadow-nav: var(--shadow-nav);\n}\nbody.sm-body {\n\tbackground-color: var(--background);\n\tcolor: var(--text);\n\tfont-family: var(--font);\n}"
+}
