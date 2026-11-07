@@ -826,12 +826,36 @@ body.cv-body {
 
 /* ---------- Ürün sayfası (theme4 altyapısı + premium görünüm) ---------- */
 .cv-product { position: relative; padding-top: 14px; }
-.cv-product__backdrop { position: absolute; inset: 0 0 auto; height: 380px; z-index: -1; background: linear-gradient(180deg, var(--v-bg), rgba(250, 246, 239, 0)); }
-.cv-pal--kakao .cv-product__backdrop, .cv-pal--visne .cv-product__backdrop, .cv-pal--bayram .cv-product__backdrop { background: linear-gradient(180deg, var(--cv-sand), rgba(250, 246, 239, 0)); }
-.cv-product .t4-product__media, .cv-product .product-media-card { border-radius: 0 !important; background: var(--cv-paper) !important; box-shadow: none !important; border: 1px solid var(--cv-line) !important; overflow: hidden; animation: cv-fade 1.2s var(--cv-ease) both; }
-.cv-product .t4-product__buybox, .cv-product .product-purchase-card { border-radius: 0 !important; background: var(--cv-paper) !important; box-shadow: none !important; border: 1px solid var(--cv-line) !important; animation: cv-rise 1.1s var(--cv-ease) .15s both; }
-.cv-product .t4-product__buybox h1 { font-family: var(--cv-display); font-weight: 500; font-size: clamp(2rem, 6vw, 2.9rem); line-height: 1.02; }
-.cv-product .current-price { font-family: var(--cv-font); font-weight: 600; color: var(--cv-ink-c) !important; letter-spacing: .01em; }
+/* Tüm kategorilerde aynı nötr krem geçiş (kategori rengi ürün sayfasına taşınmaz) */
+.cv-product__backdrop { position: absolute; inset: 0 0 auto; height: 300px; z-index: -1; background: linear-gradient(180deg, var(--cv-sand), rgba(250, 246, 239, 0)); }
+.cv-product .t4-product { padding-top: 6px; }
+.cv-product .t4-product__toolbar { margin-bottom: 18px; }
+.cv-product .t4-product__pager-btn { border-radius: 0; border-color: var(--cv-line); background: transparent; }
+/* Görsel: kutusuz, kemer çerçeve, sütun yüksekliğine uzamaz */
+.cv-product .t4-product__media, .cv-product .product-media-card { height: auto !important; border: 0 !important; background: transparent !important; box-shadow: none !important; border-radius: 0 !important; animation: cv-fade 1.2s var(--cv-ease) both; }
+.cv-product .t4-product__gallery-main {
+	min-height: 0 !important;
+	aspect-ratio: 1 / 1;
+	border-radius: 50% 50% 0 0 / 30% 30% 0 0 !important;
+	background: var(--cv-sand) !important;
+	overflow: hidden;
+}
+.cv-product .t4-product__gallery-main img, .cv-product .t4-product__image { width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; object-fit: cover !important; transition: transform 1.4s var(--cv-ease); }
+.cv-product .t4-product__gallery-main:hover img { transform: scale(1.04); }
+.cv-product .t4-product__expand, .cv-product .t4-product__alert-fab { border-radius: 50%; background: rgba(255, 255, 255, .9); color: var(--cv-ink-c); box-shadow: none; }
+.cv-product .product-gallery__thumbs { gap: 10px; margin-top: 14px; }
+.cv-product .product-gallery__thumb { border-radius: 0 !important; border: 1px solid var(--cv-line) !important; background: var(--cv-sand); opacity: .7; transition: opacity .3s, border-color .3s; }
+.cv-product .product-gallery__thumb.active, .cv-product .product-gallery__thumb:hover { opacity: 1; border-color: var(--cv-ink-c) !important; }
+/* Bilgi alanı: kutusuz, ince çizgilerle */
+.cv-product .t4-product__buybox, .cv-product .product-purchase-card { height: auto !important; padding: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important; border-radius: 0 !important; animation: cv-rise 1.1s var(--cv-ease) .15s both; }
+@media (min-width: 992px) { .cv-product .t4-product__buybox { padding-left: 24px !important; } }
+.cv-product .t4-product__buybox h1 { margin-bottom: 10px; font-family: var(--cv-display); font-weight: 500; font-size: clamp(2.1rem, 6vw, 3.1rem); line-height: 1.02; }
+.cv-product .t4-product__prices { margin-top: 10px; padding-top: 18px; border-top: 1px solid var(--cv-line); }
+.cv-product .current-price { font-family: var(--cv-font); font-size: 1.9rem !important; font-weight: 600; color: var(--cv-ink-c) !important; letter-spacing: .01em; }
+.cv-product .old-price { color: var(--cv-ink-soft) !important; }
+.cv-product .t4-product__specs-label { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--cv-ink-soft); }
+.cv-product .t4-product__specs-value { color: var(--cv-ink-c); }
+.cv-product .t4-product__excerpt { color: var(--cv-ink-soft); }
 .cv-product .t4-product__cart, .cv-product .cart-button, .cv-product .t4-product__buynow {
 	border-radius: 0 !important;
 	min-height: 52px;
@@ -846,10 +870,15 @@ body.cv-body {
 .cv-product .t4-product__cart:hover { background: var(--cv-espresso) !important; }
 .cv-product .t4-product__buynow { background: transparent !important; border: 1px solid var(--cv-primary-c) !important; color: var(--cv-primary-c) !important; }
 .cv-product .t4-product__buynow:hover { background: var(--cv-primary-c) !important; color: var(--cv-accent-c) !important; }
-.cv-product .qty-picker { border-radius: 0 !important; }
-.cv-product .nav-tabs { border-bottom: 1px solid var(--cv-line); }
-.cv-product .nav-tabs .nav-link { border: 0; border-radius: 0; font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--cv-ink-soft); }
-.cv-product .nav-tabs .nav-link.active { background: transparent; color: var(--cv-ink-c); box-shadow: inset 0 -2px 0 var(--cv-ink-c); }
+.cv-product .qty-picker, .cv-product .t4-product__fav-btn { border-radius: 0 !important; background: transparent !important; border-color: var(--cv-line-strong) !important; }
+/* Sosyal paylaşım: marka renkleri yerine sade çizgi ikonlar */
+.cv-product .social-share .share-btn { width: 36px; height: 36px; border-radius: 50% !important; overflow: hidden; filter: grayscale(1) sepia(.35) brightness(.75); opacity: .8; transition: filter .5s var(--cv-ease), opacity .5s, transform .5s var(--cv-ease) !important; }
+.cv-product .social-share .share-btn:hover { filter: none; opacity: 1; }
+/* Sekmeler / açıklama */
+.cv-product .product-tab-content, .cv-product .t4-product__tabs, .cv-product .card { background: transparent !important; border-color: var(--cv-line) !important; border-radius: 0 !important; box-shadow: none !important; }
+.cv-product .nav-tabs { border-bottom: 1px solid var(--cv-line); background: transparent !important; }
+.cv-product .nav-tabs .nav-link { border: 0; border-radius: 0; background: transparent !important; font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--cv-ink-soft); }
+.cv-product .nav-tabs .nav-link.active { color: var(--cv-ink-c); box-shadow: inset 0 -2px 0 var(--cv-ink-c); }
 .cv-product__promise { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 40px; margin-bottom: 30px; border-top: 1px solid var(--cv-line); border-bottom: 1px solid var(--cv-line); }
 .cv-promise { display: flex; flex-direction: column; gap: 2px; padding: 22px 12px; border-left: 1px solid var(--cv-line); }
 .cv-promise:first-child { border-left: 0; padding-left: 0; }
