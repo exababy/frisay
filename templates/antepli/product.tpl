@@ -9,8 +9,8 @@
 		{include file='theme4/product.tpl'}
 	</div>
 	<div class="cv-product__promise cv-container" data-cv-reveal>
-		<div class="cv-promise"><span aria-hidden="true">🔥</span><strong>Sıcak fırından</strong><small>Her gün taze üretim</small></div>
-		<div class="cv-promise"><span aria-hidden="true">🌰</span><strong>Antep usulü</strong><small>Ustalarımızın elinden</small></div>
-		<div class="cv-promise"><span aria-hidden="true">📦</span><strong>Özel kutuda</strong><small>Ezilmeden teslim</small></div>
+		<div class="cv-promise"><span class="cv-promise__num">01</span><strong>Sıcak fırından</strong><small>Her gün taze üretim</small></div>
+		<div class="cv-promise"><span class="cv-promise__num">02</span><strong>Antep usulü</strong><small>Ustalarımızın elinden</small></div>
+		<div class="cv-promise"><span class="cv-promise__num">03</span><strong>Özel kutuda</strong><small>Ezilmeden teslim</small></div>
 	</div>
 </div>

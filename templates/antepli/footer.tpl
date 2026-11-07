@@ -7,9 +7,10 @@
 {include file='theme4/plugin/schema-jsonld.tpl'}
 
 <footer class="cv-footer" role="contentinfo">
-	<svg class="cv-footer__drip" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-		<path d="M0,0 H1440 V38 C1400,38 1392,92 1360,92 C1328,92 1330,40 1290,40 C1250,40 1252,70 1220,70 C1188,70 1190,36 1150,36 C1110,36 1104,104 1068,104 C1032,104 1030,42 990,42 C950,42 954,66 922,66 C890,66 892,34 852,34 C812,34 806,86 772,86 C738,86 742,40 702,40 C662,40 664,112 626,112 C588,112 592,44 552,44 C512,44 516,72 484,72 C452,72 454,36 414,36 C374,36 370,94 336,94 C302,94 304,40 264,40 C224,40 228,64 196,64 C164,64 166,38 126,38 C86,38 82,100 48,100 C14,100 18,38 0,38 Z"/>
-	</svg>
+	<div class="cv-footer__top cv-container">
+		<p class="cv-footer__motto">Antep'in ustalığı, <em>her gün taze.</em></p>
+		<span class="cv-footer__rule" aria-hidden="true"></span>
+	</div>
 	<div class="cv-container cv-footer__inner">
 		<div class="cv-footer__brand">
 			<a href="{$domain}" class="cv-footer__logo" title="{$siteName|escape}"><img src="{$antepli.logo_url|default:($domain|cat:'templates/antepli/img/logo.png')|escape}" alt="{$siteName|escape}" width="120" height="113" loading="lazy"></a>
@@ -48,13 +49,14 @@
 		<div class="cv-footer__col cv-footer__contact">
 			<h3 class="cv-footer__title">Bize ulaşın</h3>
 			<ul>
-				{if $contactPhone}<li><a href="tel:{$contactPhoneTel|default:$contactPhone|escape}">📞 {$contactPhone|escape}</a></li>{/if}
-				{if $contactEmail}<li><a href="mailto:{$contactEmail|escape}">✉️ {$contactEmail|escape}</a></li>{/if}
-				{if $contactAddress}<li>📍 {$contactAddress|escape}</li>{/if}
-				<li>🕘 {$openHour|escape} – {$closeHour|escape}</li>
+				{if $contactPhone}<li><a href="tel:{$contactPhoneTel|default:$contactPhone|escape}">{$contactPhone|escape}</a></li>{/if}
+				{if $contactEmail}<li><a href="mailto:{$contactEmail|escape}">{$contactEmail|escape}</a></li>{/if}
+				{if $contactAddress}<li>{$contactAddress|escape}</li>{/if}
+				<li>{$openHour|escape} – {$closeHour|escape}</li>
 			</ul>
 		</div>
 	</div>
+	{if $hooks.footer}<div class="cv-container cv-footer__hook">{$hooks.footer nofilter}</div>{/if}
 	<div class="cv-container cv-footer__bottom">
 		<span>&copy; {$year} {$siteName|escape}. {'All rights reserved.'|translate}</span>
 		<span class="cv-footer__pay" aria-label="{'Payment logos'|translate}">
@@ -75,7 +77,6 @@
 
 {include file='theme4/plugin/cart.tpl'}
 {include file='theme4/plugin/auth-modal.tpl'}
-{if $hooks.footer}{$hooks.footer nofilter}{/if}
 {/if}
 <script src="{($_t4js|cat:'jquery-3.2.1.min.js')|asset_url}"></script>
 <script src="{($_t4js|cat:'bootstrap.bundle.min.js')|asset_url}"></script>

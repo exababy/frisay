@@ -10,7 +10,7 @@ if (!defined('IN_SCRIPT') && !defined('IN_ADMIN')) {
 class AntepliVitrinService
 {
 	/** Modül sürümü — her yayında artırın; boot() farkı görüp migrate() çalıştırır. */
-	public const VERSION = '1.0.0';
+	public const VERSION = '1.1.0';
 
 	/** Şema sürümü — tablo/kolon değişince artırın. */
 	public const SCHEMA_VERSION = 1;
@@ -85,6 +85,18 @@ class AntepliVitrinService
 			}
 		}
 
+		// Önceki sürümlerin varsayılan metinleri hiç değiştirilmemişse yenileriyle güncelle
+		// (kullanıcının kendi yazdığı metinlere dokunulmaz).
+		$defaults = self::settingDefaults();
+
+		foreach (self::legacyDefaults() as $key => $oldValues) {
+			$value = (string) Settings::get($key);
+
+			if (in_array($value, $oldValues, true) && isset($defaults[$key])) {
+				Settings::set($key, $defaults[$key]);
+			}
+		}
+
 		// Instagram linki boşsa bir kereliğine markanın hesabını yaz (admin'den değiştirilebilir)
 		if (trim((string) Settings::get('INSTAGRAM_LINK')) === '' && Settings::get('AU_IG_PREFILLED') === '') {
 			Settings::set('INSTAGRAM_LINK', 'https://www.instagram.com/antepliustalar/');
@@ -156,18 +168,19 @@ class AntepliVitrinService
 	public static function settingDefaults(): array
 	{
 		return [
-			'AU_ANNOUNCE' => 'Sıcak fırından, her gün taze · Kerebiç, kahke ve kuru pasta çeşitleri 🍪',
+			'AU_ANNOUNCE' => 'Sıcak fırından, her gün taze · Kerebiç, kahke ve kuru pasta',
 			'AU_HERO_EYEBROW' => 'Sıcak Fırından · Patisserie',
-			'AU_HERO_TITLE' => 'Antep\'in ustalığı her gün taze',
-			'AU_HERO_TEXT' => 'Fıstıklı kerebiçten köylü kahkesine, şekerli ve tuzlu kuru pastadan İzmir bombasına; her lezzet kendi vitrininde. Kaydır, seç, sepete at.',
-			'AU_HERO_CTA' => 'Vitrine göz at',
+			'AU_HERO_TITLE' => 'Antep\'in ustalığı, her gün taze.',
+			'AU_HERO_TEXT' => 'Fıstıklı kerebiçten köylü kahkesine, şekerli ve tuzlu kuru pastadan İzmir bombasına; ustalarımızın elinden, her gün sıcak fırından.',
+			'AU_HERO_IMAGES' => '',
+			'AU_HERO_CTA' => 'Vitrini keşfet',
 			'AU_HERO_CTA2' => 'Bayram & toplu sipariş',
 			'AU_HERO_CTA2_URL' => 'contact',
 			'AU_BADGE_1' => 'Bol Antep fıstığı',
 			'AU_BADGE_2' => 'Günlük üretim',
 			'AU_BADGE_3' => 'Kiloyla & kutuyla',
 			'AU_SHOWCASE_TITLE' => 'Vitrinlerimiz',
-			'AU_SHOWCASE_TEXT' => 'Mağazamızdaki gibi: her çeşit kendi vitrininde, tepsi tepsi. Rafları kaydırarak keşfet.',
+			'AU_SHOWCASE_TEXT' => 'Mağazamızdaki gibi: her çeşit kendi vitrininde, tepsi tepsi.',
 			'AU_WHATSAPP' => '',
 			'AU_WHATSAPP_TEXT' => 'Merhaba, sipariş vermek istiyorum.',
 			'AU_SHOW_HOME_SLIDER' => '1',
@@ -175,6 +188,18 @@ class AntepliVitrinService
 			'AU_SHOW_MARQUEE' => '1',
 			'AU_MARQUEE' => 'Fıstıklı Kerebiç • Köylü Kahkesi • Çubuk Kahke • Tahinli • Tarsus Çöreği • Kömbe • İzmir Bombası • Şekerli Kuru Pasta • Tuzlu Kuru Pasta',
 			'AU_FOOTER_TEXT' => 'Antep\'in köklü fırın geleneğini; kerebiçten köylü kahkesine, şekerli ve tuzlu kuru pastalara kadar her gün taze üretip özenle kutuluyoruz.',
+		];
+	}
+
+	/** @return array<string, list<string>> Eski sürümlerin varsayılanları */
+	private static function legacyDefaults(): array
+	{
+		return [
+			'AU_ANNOUNCE' => ['Sıcak fırından, her gün taze · Kerebiç, kahke ve kuru pasta çeşitleri 🍪'],
+			'AU_HERO_TITLE' => ['Antep\'in ustalığı her gün taze'],
+			'AU_HERO_TEXT' => ['Fıstıklı kerebiçten köylü kahkesine, şekerli ve tuzlu kuru pastadan İzmir bombasına; her lezzet kendi vitrininde. Kaydır, seç, sepete at.'],
+			'AU_HERO_CTA' => ['Vitrine göz at'],
+			'AU_SHOWCASE_TEXT' => ['Mağazamızdaki gibi: her çeşit kendi vitrininde, tepsi tepsi. Rafları kaydırarak keşfet.'],
 		];
 	}
 
@@ -218,7 +243,7 @@ class AntepliVitrinService
 				$value = self::sanitizeLink($value);
 			}
 
-			Settings::set($key, mb_substr(strip_tags($value), 0, 600));
+			Settings::set($key, mb_substr(strip_tags($value), 0, 1200));
 		}
 
 		self::$frontConfig = null;
@@ -247,16 +272,16 @@ class AntepliVitrinService
 	public static function palettes(): array
 	{
 		return [
-			'susam' => ['label' => 'Susam (kahke)', 'swatch' => '#f7e6c4', 'accent' => '#3b1f0f'],
-			'fistik' => ['label' => 'Antep Fıstığı', 'swatch' => '#e3edd3', 'accent' => '#6f8f2e'],
-			'kakao' => ['label' => 'Kakao (koyu)', 'swatch' => '#4a2a18', 'accent' => '#f5d7a1'],
-			'tereyagi' => ['label' => 'Tereyağı', 'swatch' => '#fff4d6', 'accent' => '#c9952f'],
-			'karamel' => ['label' => 'Karamel', 'swatch' => '#f6ddbf', 'accent' => '#b8692c'],
-			'nane' => ['label' => 'Mağaza Yeşili', 'swatch' => '#e2f0e6', 'accent' => '#4e8a64'],
-			'visne' => ['label' => 'Vişne', 'swatch' => '#fbe1e4', 'accent' => '#b3263c'],
-			'tahin' => ['label' => 'Tahin', 'swatch' => '#efe6da', 'accent' => '#8c7458'],
-			'bogurtlen' => ['label' => 'Böğürtlen', 'swatch' => '#efe3f3', 'accent' => '#8b4fa3'],
-			'bayram' => ['label' => 'Bayram (marka kahve)', 'swatch' => '#3b1f0f', 'accent' => '#f5d7a1'],
+			'susam' => ['label' => 'Susam (açık kum)', 'swatch' => '#f2e8d6', 'accent' => '#a8804a'],
+			'fistik' => ['label' => 'Fıstık (adaçayı yeşili)', 'swatch' => '#e6e9dc', 'accent' => '#7a8a55'],
+			'kakao' => ['label' => 'Kakao (koyu)', 'swatch' => '#3a2216', 'accent' => '#e3c28d'],
+			'tereyagi' => ['label' => 'Tereyağı (krem)', 'swatch' => '#f6efdf', 'accent' => '#b8955a'],
+			'karamel' => ['label' => 'Ceviz', 'swatch' => '#ead9c3', 'accent' => '#9c6b3f'],
+			'nane' => ['label' => 'Mağaza yeşili', 'swatch' => '#e0e8e2', 'accent' => '#6e8b78'],
+			'visne' => ['label' => 'Bordo (koyu)', 'swatch' => '#4a1b21', 'accent' => '#e0b7a8'],
+			'tahin' => ['label' => 'Tahin', 'swatch' => '#ede6db', 'accent' => '#9a8468'],
+			'bogurtlen' => ['label' => 'Mürdüm', 'swatch' => '#e8e0e6', 'accent' => '#8a6a86'],
+			'bayram' => ['label' => 'Espresso (koyu)', 'swatch' => '#2b160a', 'accent' => '#f5d7a1'],
 		];
 	}
 
@@ -312,6 +337,26 @@ class AntepliVitrinService
 		$keys = ['susam', 'fistik', 'kakao', 'tereyagi', 'karamel', 'nane', 'tahin', 'visne'];
 
 		return $keys[$index % count($keys)];
+	}
+
+	/** @return list<string> */
+	private static function parseImageList(string $raw): array
+	{
+		$out = [];
+
+		foreach (preg_split('/[\r\n,]+/', $raw) ?: [] as $url) {
+			$url = trim($url);
+
+			if ($url !== '' && preg_match('#^(https?://|/)#i', $url)) {
+				$out[] = $url;
+			}
+
+			if (count($out) >= 3) {
+				break;
+			}
+		}
+
+		return $out;
 	}
 
 	/**
@@ -493,6 +538,7 @@ class AntepliVitrinService
 			'marquee' => $marquee,
 			'footer_text' => $settings['AU_FOOTER_TEXT'],
 			'logo_url' => self::logoUrl(),
+			'hero_images' => self::parseImageList((string) ($settings['AU_HERO_IMAGES'] ?? '')),
 			'styles' => $styles,
 		];
 

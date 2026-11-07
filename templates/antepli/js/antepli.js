@@ -1,5 +1,5 @@
 /*!
- * Antepli Ustalar — tema etkileşimleri ve animasyonlar
+ * Antepli Ustalar — tema etkileşimleri ve animasyonlar (sade, yavaş geçişler)
  * Bağımlılık yok (jQuery yalnızca varsa sepet olaylarını dinlemek için kullanılır).
  */
 (function () {
@@ -73,7 +73,11 @@
 
 	function onScroll() {
 		var y = window.pageYOffset || 0;
-		if (header) header.classList.toggle('is-scrolled', y > 8);
+		if (header) {
+			var was = header.classList.contains('is-scrolled');
+			header.classList.toggle('is-scrolled', y > 8);
+			if (was !== (y > 8)) setTimeout(syncHeaderHeight, 560);
+		}
 		if (bottomNav) {
 			var goingDown = y > lastY + 6;
 			var goingUp = y < lastY - 6;
@@ -179,8 +183,6 @@
 					if (indicator) {
 						indicator.style.width = p.offsetWidth + 'px';
 						indicator.style.transform = 'translateX(' + p.offsetLeft + 'px)';
-						var accent = getComputedStyle(p).getPropertyValue('--v-accent');
-						if (accent) indicator.style.background = accent.trim();
 					}
 					if (scrollPill !== false && pickerTrack) {
 						var target = p.offsetLeft - (pickerTrack.clientWidth - p.offsetWidth) / 2;
@@ -275,7 +277,6 @@
 		if (!btn) return;
 		lastAddBtn = btn;
 		lastAddAt = Date.now();
-		if (!reduceMotion) burst(btn);
 	}, true);
 
 	function visibleCartTarget() {
@@ -330,32 +331,11 @@
 		var lift = Math.min(160, Math.abs(dy) * 0.5 + 60);
 
 		var anim = fly.animate([
-			{ transform: 'translate(0,0) scale(1) rotate(0deg)', opacity: 1 },
-			{ transform: 'translate(' + dx * 0.35 + 'px,' + (dy * 0.35 - lift) + 'px) scale(.75) rotate(-25deg)', opacity: 1, offset: 0.45 },
-			{ transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.12) rotate(-60deg)', opacity: 0.6 }
-		], { duration: 850, easing: 'cubic-bezier(.45,0,.25,1)' });
+			{ transform: 'translate(0,0) scale(1)', opacity: 1 },
+			{ transform: 'translate(' + dx * 0.4 + 'px,' + (dy * 0.4 - lift * 0.5) + 'px) scale(.6)', opacity: 1, offset: 0.5 },
+			{ transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.08)', opacity: 0 }
+		], { duration: 1000, easing: 'cubic-bezier(.65,0,.35,1)' });
 		anim.onfinish = function () { fly.remove(); bump(); };
-	}
-
-	function burst(btn) {
-		var r = btn.getBoundingClientRect();
-		var box = doc.createElement('div');
-		box.className = 'cv-burst';
-		box.style.left = (r.left + r.width / 2) + 'px';
-		box.style.top = (r.top + r.height / 2) + 'px';
-		var colors = ['#e9c88c', '#f5d7a1', '#8db043', '#2b1a10', '#c98a3d', '#fff3d6'];
-		for (var i = 0; i < 14; i++) {
-			var p = doc.createElement('i');
-			var ang = (Math.PI * 2 * i) / 14 + Math.random() * 0.4;
-			var dist = 34 + Math.random() * 30;
-			p.style.setProperty('--tx', Math.cos(ang) * dist + 'px');
-			p.style.setProperty('--ty', Math.sin(ang) * dist + 'px');
-			p.style.setProperty('--r', Math.round(Math.random() * 180) + 'deg');
-			p.style.setProperty('--c', colors[i % colors.length]);
-			box.appendChild(p);
-		}
-		doc.body.appendChild(box);
-		setTimeout(function () { box.remove(); }, 900);
 	}
 
 	function markDone(btn) {
@@ -376,7 +356,7 @@
 		toastEl.innerHTML = '';
 		var icon = doc.createElement('span');
 		icon.className = 'cv-toast__icon';
-		icon.textContent = '🍪';
+		icon.setAttribute('aria-hidden', 'true');
 		var text = doc.createElement('span');
 		text.className = 'cv-toast__text';
 		var strong = doc.createElement('strong');

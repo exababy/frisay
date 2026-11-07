@@ -219,6 +219,13 @@ class AntepliVitrinDemo
 			AntepliVitrinService::saveStyles($styles);
 		}
 
+		// Hero için dikey fotoğraflar (yalnızca alan boşsa)
+		if (trim((string) Settings::get('AU_HERO_IMAGES')) === '') {
+			global $domain;
+			$base = rtrim((string) $domain, '/') . '/modules/antepli-vitrin/assets/demo/';
+			Settings::set('AU_HERO_IMAGES', $base . 'hero-1.jpg' . "\n" . $base . 'hero-2.jpg' . "\n" . $base . 'hero-3.jpg');
+		}
+
 		if (class_exists('Performance', false)) {
 			Performance::clearCaches();
 		}

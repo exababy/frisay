@@ -16,31 +16,20 @@ frisay.com'daki diğer 25 modül zaten repoda vardı ve repodaki sürümleri sit
 
 ## 1. Tasarım özeti
 
-**Ana sayfa (mobil öncelikli)**
+Sade, kurumsal bir pastane estetiği: Cormorant Garamond serif başlıklar, Manrope gövde metni, harf aralıklı küçük başlıklar, ince çizgiler, espresso / krem / bej renkleri. İmza motif, mağazadaki kemerlerden esinlenen **kemer çerçeveli fotoğraflar**. Emoji, çizgi film çizimi ve zıplayan animasyon yok; geçişler yavaş ve yumuşak (perde gibi açılan görseller, fade, hover'da hafif yakınlaşma).
 
-1. Kahverengi duyuru bandı ("Sıcak fırından, her gün taze…")
-2. Logo, header'dan aşağı sarkan bir tabela gibi; sayfa açılınca sallanarak yerine oturur
-3. Hero: mağazadaki yeşil kemer ve kutu rafları önünde alüminyum tepsi; tepsiye sırayla çubuk kahkeler, köylü kahkeleri ve kerebiçler düşüp hafifçe ezilerek yerleşir, üstünden buhar yükselir, iki yanda başaklar sallanır. Arka planda uçuşan susam, fıstık ve çörek otu taneleri; fare veya telefon eğimiyle paralaks. "Sıcak Fırından · Her Gün Taze" dönen damga.
-4. Eğik, kayan ürün bandı (Kerebiç • Köylü Kahkesi • Çubuk Kahke • Tahinli • …)
-5. Slider / Story modülleri (isteğe bağlı)
-6. **Vitrinlerimiz**: yapışkan vitrin seçici (kayan renkli gösterge, scrollspy), ardından her kategori için ayrı vitrin:
-   - Kategorinin renginde, sallanan çizgili tente
-   - Zincirle asılı, sallanarak yerine oturan tabela (emoji, ad, slogan, kurdele)
-   - Vitrin açılınca sırayla yanan spot ışıkları, camda ışık yansıması, masaüstünde 3D eğim
-   - Alüminyum tepsi raflara sırayla yerleşen ürünler ve sallanan fiyat etiketleri
-   - Mobilde parmakla kaydırılan raf, masaüstünde oklar ve sürükleyerek kaydırma
-7. "Fırından yeni çıktı" ve "Günün fırsatları" vitrinleri
-8. 3 adımda sipariş, bayram / toplu sipariş çağrısı, footer
+**Ana sayfa**
 
-**Sepete ekleme:** `+` butonuna basınca susam ve fıstık taneleri patlar, ürün görseli sepete uçar, sepet zıplar, buton ✓ olur ve alttan küçük bir bildirim çıkar.
+1. İnce espresso duyuru bandı
+2. Header: ortada logo, solda arama, sağda hesap / favori / sepet; masaüstünde altında ortalanmış menü satırı (Vitrinler açılır listesi + Ana Menü modülü)
+3. Hero: serif başlık ("Antep'in ustalığı, *her gün taze.*"), üç kemer çerçevede ürün fotoğrafı (admin'den girilen adresler, yoksa her vitrinin ilk ürün fotoğrafı), dönen "Sıcak Fırından · Antepli Ustalar" mührü, arka planda logodaki baklava diliminden çizilen ince çizgiler
+4. İtalik serif ürün bandı
+5. **Vitrinlerimiz**: yapışkan sekme çubuğu (kayan alt çizgi, scrollspy) ve her kategori için "Vitrin 01, 02…" başlıklı ayrı vitrin. Her vitrin kendi sade tonunda, üstten sıcak vitrin ışığı, ürünlerin altında ince raf çizgisi, mobilde kaydırılan raf, masaüstünde oklar ve sürükleme
+6. "Fırından kapınıza" üç adım, kurumsal / bayram siparişi bandı, footer
 
-**Mobil:** Uygulama hissi veren yüzen alt menü (ortada sepet), aşağı kaydırınca gizlenir. Renkli kategori kartlarıyla açılır menü.
+**10 vitrin tonu:** Susam, Fıstık (adaçayı), Kakao (koyu), Tereyağı, Ceviz, Mağaza yeşili, Bordo (koyu), Tahin, Mürdüm, Espresso (koyu). Ton seçilmezse kategori adına göre otomatik atanır ("Kerebiç" → fıstık, "Kahke" → susam, "İzmir Bombası" → bordo, "Bayram" → espresso…).
 
-**Erişilebilirlik:** "Hareketi azalt" açıksa animasyonlar kapanır, içerik doğrudan görünür.
-
-**10 vitrin paleti:** Susam (kahke), Antep Fıstığı, Kakao, Tereyağı, Karamel, Mağaza Yeşili, Vişne, Tahin, Böğürtlen, Bayram (marka kahvesi). Palet seçilmezse kategori adına göre otomatik atanır: "Kerebiç" / "Fıstıklı" → fıstık, "Kahke" / "Çubuk" → susam, "Tuzlu" → tereyağı, "Şekerli" / "Kurabiye" → kakao, "Tahinli" → tahin, "Tarsus" / "Kömbe" / "Çörek" → karamel, "İzmir Bombası" / "Vişne" → vişne, "Frambuaz" → böğürtlen, "Spesiyal" / "Tartolet" → mağaza yeşili, "Bayram" / "Paket" / "Kutu" → bayram.
-
-**Görseli olmayan ürünler** için vitrin renginde çizim gösterilir (köylü kahkesi halkası, fıstıklı kerebiç veya çubuk kahke); vitrin hiçbir zaman boş görünmez.
+**Görseli olmayan ürünler** için vitrin renginde ince çizgi illüstrasyon (kahke, kerebiç veya çubuk kahke) gösterilir.
 
 **Kiloyla satış:** FriSay çekirdeğinde "kg" satış birimi yok (adet ve m² var). Kiloyla satılan ürünleri "500 g / 1 kg" paketi olarak tanımlayın ya da ürüne gramaj varyasyonu ekleyin (Ürün → Varyasyonlar: 250 g / 500 g / 1 kg).
 

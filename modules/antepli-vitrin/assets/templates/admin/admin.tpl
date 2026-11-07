@@ -8,7 +8,7 @@
 			<span class="cv-admin__logo" aria-hidden="true"><img src="{$cvLogoUrl|escape}" alt=""></span>
 			<div>
 				<h2 class="cv-admin__title">Antepli Vitrin <small>v{$cvVersion|escape}</small></h2>
-				<p class="cv-admin__lead">Her kategori ayrı bir vitrin. Renkleri, emojileri ve sloganları buradan yönetin.</p>
+				<p class="cv-admin__lead">Her ürün grubu ayrı bir vitrin. Vitrin tonlarını, sloganları ve ana sayfa metinlerini buradan yönetin.</p>
 			</div>
 		</div>
 		<div class="cv-admin__status">
@@ -46,7 +46,6 @@
 							<th>Kategori</th>
 							<th class="text-center">Ana sayfada</th>
 							<th>Vitrin paleti</th>
-							<th style="width:80px">Emoji</th>
 							<th>Slogan</th>
 							<th>Kurdele</th>
 						</tr>
@@ -80,12 +79,11 @@
 									{/foreach}
 								</select>
 							</td>
-							<td><input type="text" name="styles[{$c.id_category}][emoji]" value="{$c.style.emoji|escape}" class="form-control form-control-sm text-center" maxlength="8" placeholder="🍪"></td>
 							<td><input type="text" name="styles[{$c.id_category}][tagline]" value="{$c.style.tagline|escape}" class="form-control form-control-sm" maxlength="190" placeholder="Kısa vitrin açıklaması"></td>
 							<td><input type="text" name="styles[{$c.id_category}][ribbon]" value="{$c.style.ribbon|escape}" class="form-control form-control-sm" maxlength="64" placeholder="Günün favorisi"></td>
 						</tr>
 					{foreachelse}
-						<tr><td colspan="6" class="text-muted">Henüz kategori yok. “Ana sayfa &amp; genel” sekmesinden demo vitrini yükleyebilirsiniz.</td></tr>
+						<tr><td colspan="5" class="text-muted">Henüz kategori yok. “Ana sayfa &amp; genel” sekmesinden demo vitrini yükleyebilirsiniz.</td></tr>
 					{/foreach}
 					</tbody>
 				</table>
@@ -123,6 +121,11 @@
 					<div class="col-12">
 						<label class="form-label">Açıklama</label>
 						<textarea name="AU_HERO_TEXT" class="form-control" rows="2">{$cvSettings.AU_HERO_TEXT|escape}</textarea>
+					</div>
+					<div class="col-12">
+						<label class="form-label">Hero görselleri (en fazla 3 adres, her satıra bir tane)</label>
+						<textarea name="AU_HERO_IMAGES" class="form-control" rows="3" placeholder="https://…/kerebic.jpg">{$cvSettings.AU_HERO_IMAGES|escape}</textarea>
+						<div class="form-text">Boş bırakırsanız her vitrinin ilk ürün fotoğrafı kullanılır. Dikey (portre) fotoğraflar en iyi sonucu verir.</div>
 					</div>
 					<div class="col-md-4">
 						<label class="form-label">Ana buton</label>
@@ -180,12 +183,8 @@
 
 					<div class="col-12 mt-4"><h3 class="h6 mb-2">Görünüm</h3>
 						<div class="form-check form-switch">
-							<input class="form-check-input" type="checkbox" id="cvSprinkles" name="AU_SHOW_SPRINKLES" value="1"{if $cvSettings.AU_SHOW_SPRINKLES == '1'} checked{/if}>
-							<label class="form-check-label" for="cvSprinkles">Uçuşan şeker taneleri (hero animasyonu)</label>
-						</div>
-						<div class="form-check form-switch">
 							<input class="form-check-input" type="checkbox" id="cvMarquee" name="AU_SHOW_MARQUEE" value="1"{if $cvSettings.AU_SHOW_MARQUEE == '1'} checked{/if}>
-							<label class="form-check-label" for="cvMarquee">Kayan lezzet bandı</label>
+							<label class="form-check-label" for="cvMarquee">Kayan ürün bandı</label>
 						</div>
 						<div class="form-check form-switch">
 							<input class="form-check-input" type="checkbox" id="cvSlider" name="AU_SHOW_HOME_SLIDER" value="1"{if $cvSettings.AU_SHOW_HOME_SLIDER == '1'} checked{/if}>
