@@ -24,7 +24,7 @@
 		},
 		"cv-bg": {
 			"label": "Sayfa arka planı (krem)",
-			"default": "#FBF4E8",
+			"default": "#FAF6EF",
 			"group": "marka"
 		},
 		"cv-accent": {
@@ -34,12 +34,12 @@
 		},
 		"cv-highlight": {
 			"label": "Başlık vurgu (bakır)",
-			"default": "#B9772F",
+			"default": "#A8804A",
 			"group": "marka"
 		},
 		"cv-pistachio": {
 			"label": "Fıstık yeşili",
-			"default": "#7A9A3C",
+			"default": "#7A8A55",
 			"group": "marka"
 		}
 	},
@@ -49,5 +49,5 @@
 		"background": "cv-bg",
 		"text": "cv-ink"
 	},
-	"color_extra_css": ":root {\n\t--primary-light: #F5D7A1;\n\t--secondary: #F5D7A1;\n\t--text-muted: #85644F;\n\t--border: #EADCC4;\n\t--surface: #FFFFFF;\n\t--white: #FFFFFF;\n\t--danger: #B3263C;\n\t--radius: 18px;\n\t--radius-lg: 24px;\n\t--radius-pill: 999px;\n\t--shadow: 0 10px 30px rgba(59, 31, 15, 0.08);\n\t--shadow-nav: 0 -6px 24px rgba(59, 31, 15, 0.10);\n\t--container: 1240px;\n\t--transition: 260ms cubic-bezier(.22,1,.36,1);\n\t--font: 'Nunito', system-ui, -apple-system, sans-serif;\n\t--sn-blue: var(--primary);\n\t--sn-blue-dark: var(--primary-hover);\n\t--sm-primary: var(--primary);\n\t--sm-primary-dark: var(--primary-hover);\n\t--sm-primary-soft: var(--primary-light);\n\t--sm-accent: var(--primary);\n\t--sm-accent-dark: var(--primary-hover);\n\t--sm-bg: var(--background);\n\t--sm-surface: var(--surface);\n\t--sm-text: var(--text);\n\t--sm-muted: var(--text-muted);\n\t--sm-border: var(--border);\n\t--sm-radius: var(--radius);\n\t--sm-radius-lg: var(--radius-lg);\n\t--sm-shadow: var(--shadow);\n\t--sm-shadow-nav: var(--shadow-nav);\n}\nbody.sm-body {\n\tbackground-color: var(--background);\n\tcolor: var(--text);\n\tfont-family: var(--font);\n}"
+	"color_extra_css": ":root {\n\t--primary-light: #F5D7A1;\n\t--secondary: #F5D7A1;\n\t--text-muted: #85644F;\n\t--border: #EADCC4;\n\t--surface: #FFFFFF;\n\t--white: #FFFFFF;\n\t--danger: #B3263C;\n\t--radius: 18px;\n\t--radius-lg: 24px;\n\t--radius-pill: 999px;\n\t--shadow: 0 10px 30px rgba(59, 31, 15, 0.08);\n\t--shadow-nav: 0 -6px 24px rgba(59, 31, 15, 0.10);\n\t--container: 1240px;\n\t--transition: 260ms cubic-bezier(.22,1,.36,1);\n\t--font: 'Manrope', system-ui, -apple-system, sans-serif;\n\t--sn-blue: var(--primary);\n\t--sn-blue-dark: var(--primary-hover);\n\t--sm-primary: var(--primary);\n\t--sm-primary-dark: var(--primary-hover);\n\t--sm-primary-soft: var(--primary-light);\n\t--sm-accent: var(--primary);\n\t--sm-accent-dark: var(--primary-hover);\n\t--sm-bg: var(--background);\n\t--sm-surface: var(--surface);\n\t--sm-text: var(--text);\n\t--sm-muted: var(--text-muted);\n\t--sm-border: var(--border);\n\t--sm-radius: var(--radius);\n\t--sm-radius-lg: var(--radius-lg);\n\t--sm-shadow: var(--shadow);\n\t--sm-shadow-nav: var(--shadow-nav);\n}\nbody.sm-body {\n\tbackground-color: var(--background);\n\tcolor: var(--text);\n\tfont-family: var(--font);\n}"
 }

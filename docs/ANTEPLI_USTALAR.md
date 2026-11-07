@@ -119,6 +119,7 @@ Tasarım gereği hiçbir güncellemede tema veya modülü kaldırıp yeniden kur
 | Durum | Ne olur? |
 |-------|----------|
 | **FriSay çekirdek güncellemesi** (Admin → Güncelleme) | Güncelleyici dosyaları üzerine kopyalar ama silmez; `templates/antepli/` ve `modules/antepli-vitrin/` FriSay paketinde olmadığı için aynen kalır. Ayarlar veritabanında olduğu için korunur. |
+| **Sepet / ödeme / hesap sayfalarının renkleri** | Bu sayfalar theme4 şablonlarını kullanır; theme4'ün lacivert, turuncu ve soğuk gri renkleri `templates/antepli/css/antepli-skin.css` renk katmanıyla marka tonlarına çevrilir. Bu dosya otomatik üretilir; FriSay güncellemesiyle theme4 CSS'i değişirse Antepli Vitrin modülü onu ilk sayfa açılışında kendiliğinden yeniler. Antepli teması aktifken Tema Edit (theme4) modülünün global renk / yazı tipi CSS'i yüklenmez. |
 | **Sepet / ödeme / hesap sayfası düzeltmeleri** | Antepli teması bu sayfalarda `theme4` şablonlarını kullanır. FriSay `theme4`'ü güncellediğinde düzeltmeler antepli temasına da kendiliğinden yansır. |
 | **FriSay yeni bir sayfa eklerse** | Modül, antepli temasında bulunmayan şablonu otomatik olarak `theme4` klasöründen yükler. "Şablon bulunamadı" hatası oluşmaz. |
 | **Antepli Vitrin modülünün yeni sürümü** | Şema sürümü ayarlarda tutulur. Yeni dosyalar gelince ilk sayfa açılışında eksik tablo, kolon ve varsayılan ayarlar kendiliğinden eklenir, modül sürümü güncellenir. |

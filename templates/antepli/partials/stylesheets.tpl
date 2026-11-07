@@ -12,5 +12,6 @@
 {if $css}
 <link rel="stylesheet" href="{($_t4css|cat:$css)|asset_url}" />
 {/if}
+<link rel="stylesheet" href="{($css_dir|cat:'antepli-skin.css')|asset_url}" />
 <link rel="stylesheet" href="{($css_dir|cat:'antepli.css')|asset_url}" />
 <link rel="stylesheet" href="{($css_dir|cat:'custom.css')|asset_url}" />

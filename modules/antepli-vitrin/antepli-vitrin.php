@@ -55,6 +55,30 @@ class AntepliVitrinModule extends ModuleBase
 		AntepliVitrinService::migrateIfNeeded();
 		AntepliVitrinService::registerTemplateFallback();
 
+		// theme4 CSS'i (FriSay güncellemesiyle) değiştiyse renk katmanını yenile
+		try {
+			require_once __DIR__ . '/lib/AntepliSkinBuilder.php';
+
+			if (AntepliSkinBuilder::isStale()) {
+				AntepliSkinBuilder::build();
+			}
+		} catch (Throwable $e) {
+			error_log('antepli-skin: ' . $e->getMessage());
+		}
+
+		// Antepli teması aktifken Tema Edit (theme4) modülünün global renk/yazı tipi CSS'ini yükleme
+		Module::registerHook('head.assets', static function (&$assets): void {
+			if (!is_array($assets) || !class_exists('Theme', false) || Theme::currentName() !== AntepliVitrinService::THEME) {
+				return;
+			}
+
+			foreach (['css', 'js'] as $type) {
+				$assets[$type] = array_values(array_filter($assets[$type] ?? [], static function ($url): bool {
+					return strpos((string) $url, '/modules/theme4/assets/') === false;
+				}));
+			}
+		});
+
 		Module::registerHook('smarty.assign', static function ($smarty = null): void {
 			if (!$smarty || !defined('IN_SCRIPT') || defined('IN_ADMIN')) {
 				return;
