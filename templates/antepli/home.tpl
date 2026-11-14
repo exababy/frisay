@@ -28,24 +28,22 @@
 	<section class="cv-hero" data-cv-hero>
 		<div class="cv-container">
 			<div class="cv-bento">
-				<div class="cv-tile cv-tile--dark cv-bento__main" data-cv-spot>
-					<span class="cv-bento__glow" aria-hidden="true"></span>
-					<p class="cv-chip cv-chip--live cv-anim" style="--d:.05s"><i aria-hidden="true"></i>{$cv.hero_eyebrow|default:'Sıcak Fırından · Patisserie'|escape}</p>
+				<div class="cv-tile cv-tile--line cv-bento__main">
+					<svg class="cv-bento__mark" viewBox="0 0 200 200" aria-hidden="true"><path d="M100 4 196 100 100 196 4 100Z"/><path d="M100 22 178 100 100 178 22 100Z"/></svg>
+					<p class="cv-kicker cv-anim" style="--d:.05s"><span class="cv-rule" aria-hidden="true"></span>{$cv.hero_eyebrow|default:'Sıcak Fırından · Patisserie'|escape}</p>
 					<h1 class="cv-hero__title" data-cv-split>{$cv.hero_title|default:'Antep\'in ustalığı, her gün taze.'|escape}</h1>
-					<p class="cv-hero__text cv-anim" style="--d:.6s">{$cv.hero_text|default:'Fıstıklı kerebiçten köylü kahkesine, şekerli ve tuzlu kuru pastadan İzmir bombasına; ustalarımızın elinden, her gün sıcak fırından.'|escape}</p>
-					<div class="cv-hero__cta cv-anim" style="--d:.75s">
-						<a href="#cvVitrinler" class="cv-btn cv-btn--light cv-btn--arrow" data-cv-scroll>{$cv.hero_cta|default:'Vitrini keşfet'|escape}<span class="cv-btn__ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+					<p class="cv-hero__text cv-anim" style="--d:.5s">{$cv.hero_text|default:'Fıstıklı kerebiçten köylü kahkesine, şekerli ve tuzlu kuru pastadan İzmir bombasına; ustalarımızın elinden, her gün sıcak fırından.'|escape}</p>
+					<div class="cv-hero__cta cv-anim" style="--d:.6s">
+						<a href="#cvVitrinler" class="cv-btn cv-btn--primary" data-cv-scroll>{$cv.hero_cta|default:'Vitrini keşfet'|escape}</a>
 						{if $cv.hero_cta2|default:'' != ''}
 						{assign var=_cta2 value=$cv.hero_cta2_url|default:'contact'}
-						<a href="{if $_cta2|substr:0:4 == 'http'}{$_cta2|escape}{else}{$domain}{$_cta2|escape}{/if}" class="cv-btn cv-btn--ghost-light">{$cv.hero_cta2|escape}</a>
+						<a href="{if $_cta2|substr:0:4 == 'http'}{$_cta2|escape}{else}{$domain}{$_cta2|escape}{/if}" class="cv-hero__more">{$cv.hero_cta2|escape}</a>
 						{/if}
 					</div>
 					{assign var=_badges value=$cv.badges|default:['Bol Antep fıstığı','Günlük üretim','Kiloyla & kutuyla']}
 					{if $_badges|@count}
-					<ul class="cv-hero__facts">
-						{foreach $_badges as $b name=hb}
-						<li class="cv-anim" style="--d:{0.9 + $smarty.foreach.hb.index * 0.1}s">{$b|escape}</li>
-						{/foreach}
+					<ul class="cv-hero__facts cv-anim" style="--d:.7s">
+						{foreach $_badges as $b}<li>{$b|escape}</li>{/foreach}
 					</ul>
 					{/if}
 				</div>
