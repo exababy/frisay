@@ -10,7 +10,7 @@ if (!defined('IN_SCRIPT') && !defined('IN_ADMIN')) {
 class AntepliVitrinService
 {
 	/** Modül sürümü — her yayında artırın; boot() farkı görüp migrate() çalıştırır. */
-	public const VERSION = '1.1.0';
+	public const VERSION = '1.2.0';
 
 	/** Şema sürümü — tablo/kolon değişince artırın. */
 	public const SCHEMA_VERSION = 1;

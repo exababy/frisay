@@ -41,7 +41,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap">
 	{include file='./partials/stylesheets.tpl'}
 	{foreach $moduleAssets.css as $moduleCss}
 	<link rel="stylesheet" href="{$moduleCss}" />
@@ -92,7 +92,7 @@
 
 {assign var=cvLogo value=$cv.logo_url|default:($domain|cat:'templates/antepli/img/logo.png')}
 <header class="cv-header sm-header" data-cv-header>
-	<div class="cv-container cv-header__inner">
+	<div class="cv-header__inner">
 		<div class="cv-header__left">
 			<button type="button" class="cv-icon-btn cv-header__menu" data-bs-toggle="offcanvas" data-bs-target="#cvDrawer" aria-controls="cvDrawer" aria-label="{'Menu'|translate}">
 				<span class="cv-burger" aria-hidden="true"><i></i><i></i></span>
@@ -107,6 +107,30 @@
 			<img src="{$cvLogo|escape}" alt="{$siteName|escape}" class="cv-logo__badge" width="96" height="90" decoding="async" fetchpriority="high">
 			<span class="visually-hidden">{$siteName|escape}</span>
 		</a>
+
+		<nav class="cv-nav" aria-label="{'Menu'|translate}">
+					<ul class="cv-nav__list">
+						<li class="cv-nav__mega">
+							<button type="button" class="cv-nav__link" aria-haspopup="true">Vitrinler</button>
+							<div class="cv-mega">
+								<div class="cv-mega__inner">
+									<p class="cv-kicker">Ürün grupları</p>
+									<ul class="cv-mega__list">
+									{foreach $menuCategories as $cat}
+										<li><a href="{$domain}{$cat.category_link|escape}" class="cv-mega__item"><span>{$cat.category_name|escape}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+									{/foreach}
+									</ul>
+								</div>
+							</div>
+						</li>
+						{if $hooks.main_menu}
+							{$hooks.main_menu nofilter}
+						{else}
+						<li><a href="{$domain}special" class="cv-nav__link{if $pageName == 'special'} is-active{/if}">Fırsatlar</a></li>
+						<li><a href="{$domain}contact" class="cv-nav__link{if $pageName == 'contact'} is-active{/if}">{'Contact Us'|translate}</a></li>
+						{/if}
+					</ul>
+				</nav>
 
 		<div class="cv-header__tools">
 			{if $isLoggedIn}
@@ -130,29 +154,6 @@
 			</a>
 		</div>
 	</div>
-	<nav class="cv-nav cv-container" aria-label="{'Menu'|translate}">
-				<ul class="cv-nav__list">
-					<li class="cv-nav__mega">
-						<button type="button" class="cv-nav__link" aria-haspopup="true">Vitrinler</button>
-						<div class="cv-mega">
-							<div class="cv-mega__inner">
-								<p class="cv-kicker">Ürün grupları</p>
-								<ul class="cv-mega__list">
-								{foreach $menuCategories as $cat}
-									<li><a href="{$domain}{$cat.category_link|escape}" class="cv-mega__item"><span>{$cat.category_name|escape}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
-								{/foreach}
-								</ul>
-							</div>
-						</div>
-					</li>
-					{if $hooks.main_menu}
-						{$hooks.main_menu nofilter}
-					{else}
-					<li><a href="{$domain}special" class="cv-nav__link{if $pageName == 'special'} is-active{/if}">Fırsatlar</a></li>
-					<li><a href="{$domain}contact" class="cv-nav__link{if $pageName == 'contact'} is-active{/if}">{'Contact Us'|translate}</a></li>
-					{/if}
-				</ul>
-			</nav>
 	<div class="cv-header__search" data-cv-search-panel hidden>
 		<div class="cv-container">
 			{include file='theme4/plugin/header-search.tpl' smSearchInputId='cvSearchInput'}

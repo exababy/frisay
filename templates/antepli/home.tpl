@@ -5,6 +5,9 @@
 {/if}
 {* Hero görselleri: admin'den girilenler, yoksa her vitrinin ilk ürün fotoğrafı *}
 {assign var=_heroImgs value=$cv.hero_images|default:[]}
+{* Görseller vitrinlerden geliyorsa her birinin altına vitrin adı yazılır *}
+{assign var=_heroCaps value=[]}
+{assign var=_heroOwn value=$_heroImgs|@count}
 {if $_heroImgs|@count < 3 && isset($categoryBlocks)}
 	{foreach $categoryBlocks as $block}
 		{if $_heroImgs|@count >= 3}{break}{/if}
@@ -12,6 +15,7 @@
 			{assign var=_u value=$p.image_url|default:''}
 			{if $_u != '' && ($_u|replace:'favicon.png':'') == $_u}
 				{append var='_heroImgs' value=$_u}
+				{append var='_heroCaps' value=['t'=>$block.category.category_name,'u'=>$block.url]}
 				{break}
 			{/if}
 		{/foreach}
@@ -22,49 +26,60 @@
 
 	{* ================= HERO ================= *}
 	<section class="cv-hero" data-cv-hero>
-		<svg class="cv-hero__diamond" viewBox="0 0 400 400" aria-hidden="true"><path d="M200 8 392 200 200 392 8 200Z"/><path d="M200 34 366 200 200 366 34 200Z"/></svg>
-		<div class="cv-container cv-hero__inner">
-			<div class="cv-hero__copy">
-				<p class="cv-kicker cv-anim" style="--d:.05s"><span class="cv-rule" aria-hidden="true"></span>{$cv.hero_eyebrow|default:'Sıcak Fırından · Patisserie'|escape}</p>
-				<h1 class="cv-hero__title" data-cv-split>{$cv.hero_title|default:'Antep\'in ustalığı, her gün taze.'|escape}</h1>
-				<p class="cv-hero__text cv-anim" style="--d:.6s">{$cv.hero_text|default:'Fıstıklı kerebiçten köylü kahkesine, şekerli ve tuzlu kuru pastadan İzmir bombasına; ustalarımızın elinden, her gün sıcak fırından.'|escape}</p>
-				<div class="cv-hero__cta cv-anim" style="--d:.75s">
-					<a href="#cvVitrinler" class="cv-btn cv-btn--primary" data-cv-scroll>{$cv.hero_cta|default:'Vitrini keşfet'|escape}</a>
-					{if $cv.hero_cta2|default:'' != ''}
-					{assign var=_cta2 value=$cv.hero_cta2_url|default:'contact'}
-					<a href="{if $_cta2|substr:0:4 == 'http'}{$_cta2|escape}{else}{$domain}{$_cta2|escape}{/if}" class="cv-link">{$cv.hero_cta2|escape}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+		<div class="cv-container">
+			<div class="cv-bento">
+				<div class="cv-tile cv-tile--dark cv-bento__main" data-cv-spot>
+					<span class="cv-bento__glow" aria-hidden="true"></span>
+					<p class="cv-chip cv-chip--live cv-anim" style="--d:.05s"><i aria-hidden="true"></i>{$cv.hero_eyebrow|default:'Sıcak Fırından · Patisserie'|escape}</p>
+					<h1 class="cv-hero__title" data-cv-split>{$cv.hero_title|default:'Antep\'in ustalığı, her gün taze.'|escape}</h1>
+					<p class="cv-hero__text cv-anim" style="--d:.6s">{$cv.hero_text|default:'Fıstıklı kerebiçten köylü kahkesine, şekerli ve tuzlu kuru pastadan İzmir bombasına; ustalarımızın elinden, her gün sıcak fırından.'|escape}</p>
+					<div class="cv-hero__cta cv-anim" style="--d:.75s">
+						<a href="#cvVitrinler" class="cv-btn cv-btn--light cv-btn--arrow" data-cv-scroll>{$cv.hero_cta|default:'Vitrini keşfet'|escape}<span class="cv-btn__ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+						{if $cv.hero_cta2|default:'' != ''}
+						{assign var=_cta2 value=$cv.hero_cta2_url|default:'contact'}
+						<a href="{if $_cta2|substr:0:4 == 'http'}{$_cta2|escape}{else}{$domain}{$_cta2|escape}{/if}" class="cv-btn cv-btn--ghost-light">{$cv.hero_cta2|escape}</a>
+						{/if}
+					</div>
+					{assign var=_badges value=$cv.badges|default:['Bol Antep fıstığı','Günlük üretim','Kiloyla & kutuyla']}
+					{if $_badges|@count}
+					<ul class="cv-hero__facts">
+						{foreach $_badges as $b name=hb}
+						<li class="cv-anim" style="--d:{0.9 + $smarty.foreach.hb.index * 0.1}s">{$b|escape}</li>
+						{/foreach}
+					</ul>
 					{/if}
 				</div>
-				{assign var=_badges value=$cv.badges|default:['Bol Antep fıstığı','Günlük üretim','Kiloyla & kutuyla']}
-				{if $_badges|@count}
-				<ul class="cv-hero__facts">
-					{foreach $_badges as $b name=hb}
-					<li class="cv-anim" style="--d:{0.9 + $smarty.foreach.hb.index * 0.1}s">{$b|escape}</li>
-					{/foreach}
-				</ul>
-				{/if}
-			</div>
 
-			<div class="cv-hero__gallery" data-cv-parallax>
-				{if $_heroImgs|@count > 0}
-					{foreach $_heroImgs as $img name=hg}
-						{if $smarty.foreach.hg.index > 2}{break}{/if}
-						<figure class="cv-arch cv-arch--{$smarty.foreach.hg.index}" style="--d:{0.25 + $smarty.foreach.hg.index * 0.18}s">
-							<img src="{$img|escape}" alt="" {if $smarty.foreach.hg.first}fetchpriority="high"{else}loading="lazy"{/if} decoding="async">
-						</figure>
-					{/foreach}
-				{else}
-					<figure class="cv-arch cv-arch--0 cv-arch--art" style="--d:.25s">{include file='./partials/product-svg.tpl' variant=1 label=''}</figure>
-					<figure class="cv-arch cv-arch--1 cv-arch--art" style="--d:.43s">{include file='./partials/product-svg.tpl' variant=0 label=''}</figure>
-					<figure class="cv-arch cv-arch--2 cv-arch--art" style="--d:.61s">{include file='./partials/product-svg.tpl' variant=2 label=''}</figure>
-				{/if}
-				<span class="cv-seal" aria-hidden="true">
-					<svg viewBox="0 0 120 120"><defs><path id="cvSealPath" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><text><textPath href="#cvSealPath">SICAK FIRINDAN · ANTEPLİ USTALAR · </textPath></text></svg>
-					<svg class="cv-seal__mark" viewBox="0 0 40 40"><path d="M20 3 37 20 20 37 3 20Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M20 11 29 20 20 29 11 20Z" fill="currentColor"/></svg>
-				</span>
+				{section name=hg loop=3}
+					{assign var=_hi value=$smarty.section.hg.index}
+					{assign var=_cap value=$_heroCaps[$_hi - $_heroOwn]|default:null}
+					<figure class="cv-tile cv-bento__img cv-bento__img--{$_hi}" style="--d:{0.2 + $_hi * 0.12}s">
+						{if isset($_heroImgs[$_hi])}
+							<img src="{$_heroImgs[$_hi]|escape}" alt="{if $_cap}{$_cap.t|escape}{/if}" {if $_hi == 0}fetchpriority="high"{else}loading="lazy"{/if} decoding="async">
+						{else}
+							<span class="cv-bento__art">{include file='./partials/product-svg.tpl' variant=$_hi label=''}</span>
+						{/if}
+						{if $_cap}
+						<a href="{$_cap.u|escape}" class="cv-bento__cap"><span>{$_cap.t|escape}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+						{/if}
+					</figure>
+				{/section}
+
+				<div class="cv-tile cv-tile--accent cv-bento__seal">
+					<span class="cv-seal" aria-hidden="true">
+						<svg viewBox="0 0 120 120"><defs><path id="cvSealPath" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><text><textPath href="#cvSealPath">SICAK FIRINDAN · ANTEPLİ USTALAR · </textPath></text></svg>
+						<svg class="cv-seal__mark" viewBox="0 0 40 40"><path d="M20 3 37 20 20 37 3 20Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M20 11 29 20 20 29 11 20Z" fill="currentColor"/></svg>
+					</span>
+					<p class="cv-bento__seal-text"><strong>Her gün</strong> taze üretim</p>
+				</div>
+
+				<a href="#cvVitrinler" class="cv-tile cv-tile--line cv-bento__go" data-cv-scroll>
+					<span class="cv-bento__go-num">{if isset($categoryBlocks)}{$categoryBlocks|@count}{else}0{/if}</span>
+					<span class="cv-bento__go-label">vitrin, tepsi tepsi</span>
+					<span class="cv-bento__go-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span>
+				</a>
 			</div>
 		</div>
-		<a href="#cvVitrinler" class="cv-hero__scroll" data-cv-scroll aria-label="Vitrinlere kaydır"><span></span></a>
 	</section>
 
 	{* ================= ÜRÜN BANDI ================= *}

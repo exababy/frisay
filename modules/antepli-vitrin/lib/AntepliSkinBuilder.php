@@ -16,6 +16,9 @@ if (!defined('IN_SCRIPT') && !defined('IN_ADMIN') && PHP_SAPI !== 'cli') {
 class AntepliSkinBuilder
 {
 	/** theme4'ten okunacak dosyalar (sıra önemli değil) */
+	/** Üretim kuralları sürümü (değişince antepli-skin.css yeniden kurulur) */
+	private const BUILD = 2;
+
 	private const SOURCES = [
 		'style.css', 'pages.css', 'account-orders.css', 'account-hub.css', 'auth.css',
 		'notifications.css', 'cart-modal.css', 'shopmore.css', 'product.css', 'catalog.css',
@@ -95,6 +98,11 @@ class AntepliSkinBuilder
 			return true;
 		}
 
+		// Üretici kuralları değiştiyse (BUILD) katman yeniden kurulur
+		if (strpos((string) @file_get_contents($out, false, null, 0, 600), 'skin-build: ' . self::BUILD) === false) {
+			return true;
+		}
+
 		$built = (int) filemtime($out);
 
 		foreach (self::SOURCES as $file) {
@@ -134,7 +142,7 @@ class AntepliSkinBuilder
 
 		$header = "/**\n * Antepli Ustalar — theme4 renk katmanı (OTOMATİK ÜRETİLİR, elle düzenlemeyin).\n"
 			. " * Kaynak: templates/theme4/css/*  ·  Üretici: modules/antepli-vitrin/lib/AntepliSkinBuilder.php\n"
-			. " * theme4 değiştiğinde Antepli Vitrin modülü bu dosyayı kendiliğinden yeniler.\n */\n";
+			. " * theme4 değiştiğinde Antepli Vitrin modülü bu dosyayı kendiliğinden yeniler.\n * skin-build: " . self::BUILD . "\n */\n";
 
 		$written = @file_put_contents(self::outputPath(), $header . implode("\n", $chunks));
 
@@ -293,14 +301,6 @@ class AntepliSkinBuilder
 
 				continue;
 			}
-
-			if (in_array($prop, ['border-radius', 'border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius'], true)) {
-				$new = self::mapRadius($value);
-
-				if ($new !== $value) {
-					$result[] = $prop . ': ' . $new;
-				}
-			}
 		}
 
 		return implode('; ', $result) . ($result !== [] ? ';' : '');
@@ -447,16 +447,4 @@ class AntepliSkinBuilder
 	}
 
 	/** Büyük yumuşak köşeler (8–40px) → sade 4px; hap (999px) ve daire (50%) korunur */
-	private static function mapRadius(string $value): string
-	{
-		return preg_replace_callback('/(\d+(?:\.\d+)?)px/', static function (array $m): string {
-			$px = (float) $m[1];
-
-			if ($px >= 8 && $px <= 40) {
-				return '4px';
-			}
-
-			return $m[0];
-		}, $value) ?? $value;
-	}
 }

@@ -16,16 +16,17 @@ frisay.com'daki diğer 25 modül zaten repoda vardı ve repodaki sürümleri sit
 
 ## 1. Tasarım özeti
 
-Sade, kurumsal bir pastane estetiği: Cormorant Garamond serif başlıklar, Manrope gövde metni, harf aralıklı küçük başlıklar, ince çizgiler, espresso / krem / bej renkleri. İmza motif, mağazadaki kemerlerden esinlenen **kemer çerçeveli fotoğraflar**. Emoji, çizgi film çizimi ve zıplayan animasyon yok; geçişler yavaş ve yumuşak (perde gibi açılan görseller, fade, hover'da hafif yakınlaşma).
+Yeni nesil, uygulama hissi veren bir pastane vitrini: Bricolage Grotesque kalın başlıklar, vurgu kelimelerinde Instrument Serif italik, Manrope gövde metni; büyük yuvarlak köşeler, hap biçimli butonlar, cam efektli yüzen başlık; espresso / krem / bej renkleri. Emoji ve çizgi film çizimi yok; hareketler yumuşak ve yaylı (sırayla beliren bento kutuları, kayan sekme göstergesi, hover'da yakınlaşan görseller, destekleyen tarayıcılarda sayfalar arası geçiş).
 
 **Ana sayfa**
 
 1. İnce espresso duyuru bandı
-2. Header: ortada logo, solda arama, sağda hesap / favori / sepet; masaüstünde altında ortalanmış menü satırı (Vitrinler açılır listesi + Ana Menü modülü)
-3. Hero: serif başlık ("Antep'in ustalığı, *her gün taze.*"), üç kemer çerçevede ürün fotoğrafı (admin'den girilen adresler, yoksa her vitrinin ilk ürün fotoğrafı), dönen "Sıcak Fırından · Antepli Ustalar" mührü, arka planda logodaki baklava diliminden çizilen ince çizgiler
-4. İtalik serif ürün bandı
-5. **Vitrinlerimiz**: yapışkan sekme çubuğu (kayan alt çizgi, scrollspy) ve her kategori için "Vitrin 01, 02…" başlıklı ayrı vitrin. Her vitrin kendi sade tonunda, üstten sıcak vitrin ışığı, ürünlerin altında ince raf çizgisi, mobilde kaydırılan raf, masaüstünde oklar ve sürükleme
-6. "Fırından kapınıza" üç adım, kurumsal / bayram siparişi bandı, footer
+2. Header: yüzen cam "ada". Masaüstünde solda logo ve menü (Vitrinler açılır listesi + Ana Menü modülü), sağda arama / favori / hesap ve koyu sepet butonu; mobilde menü, arama, ortada logo, sepet
+3. Hero: bento düzeni. Büyük koyu kutuda başlık ("Antep'in ustalığı, *her gün taze.*"), butonlar ve rozetler; yanında üç ürün fotoğrafı kutusu (admin'den girilen adresler, yoksa her vitrinin ilk ürün fotoğrafı ve vitrin adı etiketi), dönen "Sıcak Fırından · Antepli Ustalar" mührü ve vitrin sayısını gösteren kutu
+4. Büyük harfli kayan ürün bandı
+5. **Vitrinlerimiz**: yüzen hap sekmeler (kayan dolgu göstergesi, scrollspy) ve her kategori için "Vitrin 01, 02…" başlıklı ayrı vitrin. Her vitrin kendi tonunda yuvarlak bir panel; mobilde kaydırılan raf, masaüstünde oklar ve sürükleme
+6. "Fırından kapınıza" üç kart, kurumsal / bayram siparişi paneli, yuvarlak köşeli koyu footer
+7. Mobilde ekranın altında yüzen koyu menü çubuğu (Ana sayfa, Vitrinler, Sepet, Favoriler, Hesap)
 
 **10 vitrin tonu:** Susam, Fıstık (adaçayı), Kakao (koyu), Tereyağı, Ceviz, Mağaza yeşili, Bordo (koyu), Tahin, Mürdüm, Espresso (koyu). Ton seçilmezse kategori adına göre otomatik atanır ("Kerebiç" → fıstık, "Kahke" → susam, "İzmir Bombası" → bordo, "Bayram" → espresso…).
 

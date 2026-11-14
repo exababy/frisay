@@ -250,6 +250,17 @@
 		}
 	}
 
+	// Koyu panellerde fareyi izleyen sıcak ışık
+	if (canHover && !reduceMotion) {
+		$all('[data-cv-spot], .cv-cta').forEach(function (el) {
+			el.addEventListener('pointermove', function (e) {
+				var r = el.getBoundingClientRect();
+				el.style.setProperty('--mx', (e.clientX - r.left).toFixed(0) + 'px');
+				el.style.setProperty('--my', (e.clientY - r.top).toFixed(0) + 'px');
+			});
+		});
+	}
+
 	if (canHover && !reduceMotion) {
 		$all('[data-cv-tilt]').forEach(function (cas) {
 			cas.addEventListener('pointermove', function (e) {
